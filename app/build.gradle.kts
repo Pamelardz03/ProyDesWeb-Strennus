@@ -40,6 +40,20 @@ android {
 }
 
 dependencies {
+
+    // --- NUEVO: Networking ---
+    implementation(libs.retrofit)                      // Cliente HTTP
+    implementation(libs.converter.gson)                // Convertidor JSON -> Kotlin
+    implementation(platform(libs.okhttp.bom))          // BOM para versiones compatibles
+    implementation(libs.okhttp)                        // OkHttp (transporte HTTP)
+    implementation(libs.okhttp.logging)                // Logging de peticiones
+
+    // --- NUEVO: Carga de imagenes ---
+    implementation(libs.coil)                          // Coil
+
+    // --- NUEVO: Coroutines ---
+    implementation(libs.kotlinx.coroutines.android)    // Operaciones asincronas
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
