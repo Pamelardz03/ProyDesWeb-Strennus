@@ -1,9 +1,18 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Strennus_ProyWeb" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-    </style>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Strenuus" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <item name="colorPrimary">@color/red_primary</item>
+    <item name="colorPrimaryDark">@color/red_dark</item>
+    <item name="colorAccent">@color/red_primary</item>
+    <item name="android:statusBarColor">@color/status_bar</item>
+    <item name="android:navigationBarColor">@color/navigation_bar</item>
+    <item name="android:windowBackground">@color/black</item>
+    <item name="android:windowLightStatusBar">false</item>
+</style>
 
-    <style name="Theme.Strennus_ProyWeb" parent="Base.Theme.Strennus_ProyWeb" />
+<style name="Theme.Strenuus.Splash" parent="Theme.Strenuus">
+    <item name="android:windowBackground">@color/black</item>
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:windowFullscreen">true</item>
+</style>
 </resources>
