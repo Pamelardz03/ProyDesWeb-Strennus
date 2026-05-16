@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <!-- Background Image -->
+    <!-- Imagen Fondo -->
     <ImageView
         android:id="@+id/backgroundImage"
         android:layout_width="688dp"
@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Title -->
+    <!-- Titulo -->
     <TextView
         android:id="@+id/tvAppName"
         android:layout_width="wrap_content"
@@ -32,7 +32,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Login Card -->
+    <!-- Login Tarjeta -->
     <androidx.cardview.widget.CardView
         android:id="@+id/loginCard"
         android:layout_width="320dp"
@@ -51,7 +51,7 @@
             android:orientation="vertical"
             android:padding="24dp">
 
-            <!-- Title -->
+            <!-- Iniciar Sesion Titulo -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="24dp" />
 
-            <!-- Usuario Label -->
+            <!-- Usuario -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="8dp" />
 
-            <!-- Usuario Input -->
+            <!-- Usuario Campo Input -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
                     android:textStyle="italic" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Contraseña Label -->
+            <!-- Contraseña -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -110,7 +110,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="8dp" />
 
-            <!-- Contraseña Input -->
+            <!-- Contraseña Campo Input -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -137,13 +137,13 @@
                     android:textStyle="italic" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Forgot Password -->
+            <!-- String Olvidar Contraseña -->
             <TextView
                 android:id="@+id/tvForgotPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Olvidé mi contraseña"
-                android:textColor="@color/black"
+                android:textColor="@color/red_primary"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:layout_gravity="center_horizontal"
@@ -151,7 +151,7 @@
                 android:padding="8dp"
                 style="@style/Widget.Material3.Button.TextButton" />
 
-            <!-- Login Button -->
+            <!-- Boton Login -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
@@ -165,13 +165,13 @@
                 android:layout_marginBottom="8dp"
                 android:paddingVertical="12dp" />
 
-            <!-- Create Account -->
+            <!-- String Craer Cuenta -->
             <TextView
                 android:id="@+id/tvCreateAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Crear cuenta"
-                android:textColor="@color/black"
+                android:textColor="@color/red_primary"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:layout_gravity="center_horizontal"
