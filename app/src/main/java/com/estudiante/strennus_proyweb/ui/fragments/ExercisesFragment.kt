@@ -136,7 +136,7 @@ class ExercisesFragment : Fragment(),
             try {
                 // 3. Hacer la petición HTTP
                 val call = retrofit.create(APIService::class.java)
-                    .searchExercises(name = query)
+                    .getExercises(offset = 0)
 
                 Log.d("ExercisesFragment", "Search: ${call.body()}")
 

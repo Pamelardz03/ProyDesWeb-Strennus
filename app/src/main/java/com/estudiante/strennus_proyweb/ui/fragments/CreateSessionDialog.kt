@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.estudiante.strennus_proyweb.data.APIService
 import com.estudiante.strennus_proyweb.data.Exercise
 import com.estudiante.strennus_proyweb.databinding.DialogCreateSessionBinding
@@ -31,6 +32,10 @@ class CreateSessionDialog : DialogFragment() {
 
     private lateinit var adapter: ExerciseAdapter
     private val exerciseList = mutableListOf<Exercise>()
+
+    private val allExercises = mutableListOf<Exercise>()
+    private var currentOffset = 0
+    private var isLoading = false
 
     private val retrofit: Retrofit by lazy {
         val logging = HttpLoggingInterceptor().apply {
@@ -88,7 +93,7 @@ class CreateSessionDialog : DialogFragment() {
                     if (query.isEmpty()) {
                         loadExercises()
                     } else {
-                        searchExercises(query)
+                        filterExercises(query)
                     }
                 }
             }
@@ -108,6 +113,17 @@ class CreateSessionDialog : DialogFragment() {
         binding.rvAvailableExercises.setHasFixedSize(true)
         binding.rvAvailableExercises.layoutManager = LinearLayoutManager(requireContext())
         binding.rvAvailableExercises.adapter = adapter
+        binding.rvAvailableExercises.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val lastVisible = layoutManager.findLastVisibleItemPosition()
+                val total = layoutManager.itemCount
+                if (lastVisible >= total - 3 && !isLoading) {
+                    loadMoreExercises()
+                }
+            }
+        })
     }
 
     private fun loadExercises() {
@@ -124,6 +140,8 @@ class CreateSessionDialog : DialogFragment() {
                         val exercises = call.body()?.exercises ?: emptyList<Exercise>()
                         exerciseList.clear()
                         exerciseList.addAll(exercises)
+                        allExercises.clear()
+                        allExercises.addAll(exercises)
                         adapter.notifyDataSetChanged()
                     }
                 }
@@ -133,23 +151,36 @@ class CreateSessionDialog : DialogFragment() {
         }
     }
 
-    private fun searchExercises(query: String) {
+    private fun filterExercises(query: String) {
+        val filtered = allExercises.filter {
+            it.name.lowercase().contains(query.lowercase())
+        }
+        exerciseList.clear()
+        exerciseList.addAll(filtered)
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun loadMoreExercises() {
+        if (isLoading) return
+        isLoading = true
+        currentOffset += 100
+
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                // Usa searchExercises con el parámetro name
                 val call = retrofit.create(APIService::class.java)
-                    .searchExercises(name = query)
+                    .getExercises(offset = currentOffset)
 
                 withContext(Dispatchers.Main) {
                     if (call.isSuccessful) {
                         val exercises = call.body()?.exercises ?: emptyList<Exercise>()
-                        exerciseList.clear()
                         exerciseList.addAll(exercises)
+                        allExercises.addAll(exercises)
                         adapter.notifyDataSetChanged()
                     }
+                    isLoading = false
                 }
             } catch (e: Exception) {
-                Log.e("CreateSessionDialog", "Error búsqueda: ${e.message}")
+                isLoading = false
             }
         }
     }
