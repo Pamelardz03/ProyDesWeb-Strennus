@@ -13,29 +13,31 @@ import com.estudiante.strennus_proyweb.entities.Rutina
 import com.estudiante.strennus_proyweb.entities.Sesion
 import com.estudiante.strennus_proyweb.entities.Usuario
 
-@Database(entities = [
-    Usuario::class,
-    Sesion::class,
-    DetalleSesion::class,
-    Rutina::class
-], version = 1, exportSchema = false)
+@Database(
+    entities = [Usuario::class, Sesion::class, DetalleSesion::class, Rutina::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class AppDataBase : RoomDatabase() {
-    abstract fun usuarioDao() : UsuarioDao
-    abstract fun rutinaDao() : RutinaDao
-    abstract fun sesionDao() : SesionDao
-    abstract fun detalleDao() : DetalleSesionDao
+    abstract fun usuarioDao(): UsuarioDao
+    abstract fun rutinaDao(): RutinaDao
+    abstract fun sesionDao(): SesionDao
+    abstract fun detalleDao(): DetalleSesionDao
 
-    @Volatile
-    private var INSTANCE: AppDataBase? = null
-    fun getInstance(context : Context): AppDataBase {
-        return INSTANCE ?: synchronized(this){
-            val instance = Room.databaseBuilder(
-                context.applicationContext,
-                AppDataBase::class.java,
-                "strennus_database"
-            ).build()
-            INSTANCE = instance
-            instance
+    companion object {
+        @Volatile
+        private var INSTANCE: AppDataBase? = null
+
+        fun getInstance(context: Context): AppDataBase {
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDataBase::class.java,
+                    "strennus_database"
+                ).build()
+                INSTANCE = instance
+                instance
+            }
         }
     }
 }
