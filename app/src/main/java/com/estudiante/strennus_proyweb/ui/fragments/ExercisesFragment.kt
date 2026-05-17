@@ -1,13 +1,18 @@
-package com.estudiante.strennus_proyweb
+package com.estudiante.strennus_proyweb.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.estudiante.strennus_proyweb.data.APIService
+import com.estudiante.strennus_proyweb.data.Exercise
+import com.estudiante.strennus_proyweb.ui.adapters.ExerciseAdapter
 import com.estudiante.strennus_proyweb.databinding.FragmentExercisesBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.Locale
 
 class ExercisesFragment : Fragment(),
-    androidx.appcompat.widget.SearchView.OnQueryTextListener {
+    SearchView.OnQueryTextListener {
 
     // --- 9.1 Propiedades ---
     private var _binding: FragmentExercisesBinding? = null
@@ -172,7 +177,7 @@ class ExercisesFragment : Fragment(),
 
     private fun hideKeyboard() {
         val imm = requireContext()
-            .getSystemService(android.content.Context.INPUT_METHOD_SERVICE)
+            .getSystemService(Context.INPUT_METHOD_SERVICE)
                 as InputMethodManager
         imm.hideSoftInputFromWindow(binding.viewRoot.windowToken, 0)
     }

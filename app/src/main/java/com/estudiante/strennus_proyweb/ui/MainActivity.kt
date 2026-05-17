@@ -1,15 +1,14 @@
-package com.estudiante.strennus_proyweb
+package com.estudiante.strennus_proyweb.ui
 
+import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import android.os.Bundle
+import com.estudiante.strennus_proyweb.R
 import com.estudiante.strennus_proyweb.databinding.ActivityMainMenuBinding
-
-import com.estudiante.strennus_proyweb.ui.fragments.ExerciseCatalogFragment
 import com.estudiante.strennus_proyweb.ui.fragments.HomeFragment
-import com.estudiante.strennus_proyweb.ui.fragments.SessionsFragment
-import com.estudiante.strennus_proyweb.ui.fragments.RankingFragment
 import com.estudiante.strennus_proyweb.ui.fragments.ProfileFragment
+import com.estudiante.strennus_proyweb.ui.fragments.RankingFragment
+import com.estudiante.strennus_proyweb.ui.fragments.SessionsFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainMenuBinding

@@ -1,4 +1,4 @@
-package com.estudiante.strennus_proyweb
+package com.estudiante.strennus_proyweb.ui.fragments
 
 import android.os.Bundle
 import android.text.Editable
@@ -9,7 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.estudiante.strennus_proyweb.data.APIService
+import com.estudiante.strennus_proyweb.data.Exercise
 import com.estudiante.strennus_proyweb.databinding.DialogCreateSessionBinding
+import com.estudiante.strennus_proyweb.ui.adapters.ExerciseAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -54,13 +57,18 @@ class CreateSessionDialog : DialogFragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog?.window?.setLayout(
             ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.MATCH_PARENT
         )
+        dialog?.window?.setGravity(android.view.Gravity.BOTTOM)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView()
         loadExercises()
@@ -88,7 +96,15 @@ class CreateSessionDialog : DialogFragment() {
     }
 
     private fun initRecyclerView() {
-        adapter = ExerciseAdapter(exerciseList)
+        adapter = ExerciseAdapter(exerciseList) { exercise ->
+            // Por ahora solo muestra que se agregó
+            android.widget.Toast.makeText(
+                requireContext(),
+                "${exercise.name} agregado",
+                android.widget.Toast.LENGTH_SHORT
+            ).show()
+        }
+
         binding.rvAvailableExercises.setHasFixedSize(true)
         binding.rvAvailableExercises.layoutManager = LinearLayoutManager(requireContext())
         binding.rvAvailableExercises.adapter = adapter
