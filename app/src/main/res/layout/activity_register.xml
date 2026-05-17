@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <!-- Background Image -->
     <ImageView
         android:id="@+id/backgroundImage"
         android:layout_width="688dp"
@@ -17,7 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Title -->
     <TextView
         android:id="@+id/tvAppName"
         android:layout_width="wrap_content"
@@ -32,7 +30,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Register Card -->
     <androidx.cardview.widget.CardView
         android:id="@+id/registerCard"
         android:layout_width="320dp"
@@ -56,7 +53,6 @@
                 android:orientation="vertical"
                 android:padding="24dp">
 
-                <!-- Title -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -193,7 +189,6 @@
                         android:textColorHint="@color/gray_light" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Register Button -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnRegister"
                     android:layout_width="match_parent"

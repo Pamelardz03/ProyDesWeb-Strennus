@@ -13,7 +13,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Sesiones Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,7 +56,6 @@
 
                 </LinearLayout>
 
-                <!-- RecyclerView for sessions -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvSessionsPreview"
                     android:layout_width="match_parent"
@@ -65,7 +63,6 @@
                     android:nestedScrollingEnabled="false"
                     android:layout_marginBottom="16dp" />
 
-                <!-- New Session Button -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnNewSession"
                     android:layout_width="match_parent"
@@ -126,7 +123,6 @@
 
                 </LinearLayout>
 
-                <!-- Steps Count -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -153,7 +149,6 @@
 
                 </LinearLayout>
 
-                <!-- Progress Bar -->
                 <ProgressBar
                     android:id="@+id/progressSteps"
                     style="?android:attr/progressBarStyleHorizontal"
@@ -168,7 +163,6 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Actividad Diaria Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -210,7 +204,6 @@
 
                 </LinearLayout>
 
-                <!-- Content with stats and circular progress -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -296,7 +289,6 @@
 
                     </LinearLayout>
 
-                    <!-- Circular Progress (usar custom view o librería) -->
                     <FrameLayout
                         android:layout_width="128dp"
                         android:layout_height="128dp">

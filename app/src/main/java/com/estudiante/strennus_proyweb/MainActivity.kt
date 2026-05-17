@@ -1,18 +1,15 @@
 package com.estudiante.strennus_proyweb
 
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import com.estudiante.strennus_proyweb.databinding.ActivityMainMenuBinding
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainMenuBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // Carga ExercisesFragment directo para probar Retrofit
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, ExercisesFragment.newInstance())
-                .commit()
-        }
+        binding = ActivityMainMenuBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 }

@@ -4,9 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
-    app:cardBackgroundColor="@color/gray_dark"
-    app:cardCornerRadius="16dp"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@color/gray_darker"
+    app:cardCornerRadius="12dp"
     app:cardElevation="0dp"
     app:strokeColor="@color/gray_darker"
     app:strokeWidth="1dp">
@@ -15,28 +15,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp"
+        android:padding="12dp"
         android:gravity="center_vertical">
 
-        <!-- Ícono circular con inicial -->
         <FrameLayout
-            android:layout_width="44dp"
-            android:layout_height="44dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@drawable/bg_circle_red">
 
-            <TextView
-                android:id="@+id/tvExerciseInitial"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="center"
-                android:text="E"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:src="@drawable/ic_activity"
+                android:tint="@color/white" />
 
         </FrameLayout>
 
-        <!-- Nombre del ejercicio y músculo -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -44,29 +39,22 @@
             android:orientation="vertical"
             android:layout_marginStart="12dp">
 
-            <!-- Nombre - campo "name" de la API -->
             <TextView
-                android:id="@+id/tvExerciseName"
+                android:id="@+id/tvSessionName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nombre del ejercicio"
+                android:text="Entrenamiento matutino"
                 android:textColor="@color/white"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                android:maxLines="1"
-                android:ellipsize="end" />
+                android:textStyle="bold" />
 
-            <!-- Músculo - campo "muscle" de la API -->
             <TextView
-                android:id="@+id/tvExerciseDescription"
+                android:id="@+id/tvSessionDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Músculo"
+                android:text="5 ejercicios • 45 min • Hoy"
                 android:textColor="@color/gray_light"
-                android:textSize="12sp"
-                android:layout_marginTop="2dp"
-                android:maxLines="1"
-                android:ellipsize="end" />
+                android:textSize="12sp" />
 
         </LinearLayout>
 

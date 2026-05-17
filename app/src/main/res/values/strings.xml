@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">Strennus_ProyWeb</string>
+    <string name="app_name">Strenuus</string>
+    <string name="login_title">Iniciar Sesión</string>
+    <string name="hint_usuario">Ingresa tu usuario</string>
+    <string name="hint_password">Ingresa tu contraseña</string>
+    <string name="btn_ingresar">Ingresar</string>
+    <string name="btn_crear_cuenta">Crear cuenta</string>
+    <string name="nueva_sesion">+ Nueva sesión</string>
+    <string name="mis_sesiones">Mis Sesiones</string>
+    <string name="ranking">Ranking Global</string>
+    <string name="perfil">Perfil</string>
+    <string name="error_loading">No se pudo cargar la aplicación. Verifica tu conexión a internet.</string>
+    <string name="retry">Reintentar</string>
+    <string name="loading">Cargando…</string>
 </resources>
