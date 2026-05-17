@@ -9,5 +9,6 @@ data class Usuario(
     val id : Int = 0,
     val name : String,
     val correo : String,
+    val password : String,
     val fechaRegistro : Long
 )
