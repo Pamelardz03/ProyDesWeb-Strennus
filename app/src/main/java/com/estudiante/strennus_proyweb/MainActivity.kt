@@ -1,9 +1,15 @@
 package com.estudiante.strennus_proyweb
 
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import androidx.fragment.app.Fragment
+import android.os.Bundle
 import com.estudiante.strennus_proyweb.databinding.ActivityMainMenuBinding
+
+import com.estudiante.strennus_proyweb.ui.fragments.ExerciseCatalogFragment
+import com.estudiante.strennus_proyweb.ui.fragments.HomeFragment
+import com.estudiante.strennus_proyweb.ui.fragments.SessionsFragment
+import com.estudiante.strennus_proyweb.ui.fragments.RankingFragment
+import com.estudiante.strennus_proyweb.ui.fragments.ProfileFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainMenuBinding
@@ -13,31 +19,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Cargar HomeFragment al inicio
-        loadFragment(HomeFragment.newInstance())
+loadFragment(HomeFragment())
 
-        // Escuchar clicks del BottomNavigationView
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.navigation_home -> {
-                    loadFragment(HomeFragment.newInstance())
-                    true
-                }
-                R.id.navigation_sessions -> {
-                    true
-                }
-                R.id.navigation_ranking -> {
-                    true
-                }
-                R.id.navigation_profile -> {
-                    true
-                }
-                else -> false
-            }
-        }
+binding.bottomNavigation.setOnItemSelectedListener { item ->
+    when (item.itemId) {
+        R.id.navigation_home -> loadFragment(HomeFragment())
+        R.id.navigation_sessions -> loadFragment(SessionsFragment())
+        R.id.navigation_ranking -> loadFragment(RankingFragment())
+        R.id.navigation_profile -> loadFragment(ProfileFragment())
+    }
+    true
+}
 
-        // Seleccionar Inicio por defecto
-        binding.bottomNavigation.selectedItemId = R.id.navigation_home
+binding.bottomNavigation.selectedItemId = R.id.navigation_home
     }
 
     private fun loadFragment(fragment: Fragment) {
