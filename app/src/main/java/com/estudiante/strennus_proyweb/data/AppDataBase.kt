@@ -1,4 +1,4 @@
-package com.estudiante.strennus_proyweb
+package com.estudiante.strennus_proyweb.data
 
 import android.content.Context
 import androidx.room.Database
@@ -8,11 +8,10 @@ import com.estudiante.strennus_proyweb.DAO.DetalleSesionDao
 import com.estudiante.strennus_proyweb.DAO.RutinaDao
 import com.estudiante.strennus_proyweb.DAO.SesionDao
 import com.estudiante.strennus_proyweb.DAO.UsuarioDao
-import com.estudiante.strennus_proyweb.entities.Usuario
-import com.estudiante.strennus_proyweb.entities.Sesion
 import com.estudiante.strennus_proyweb.entities.DetalleSesion
 import com.estudiante.strennus_proyweb.entities.Rutina
-
+import com.estudiante.strennus_proyweb.entities.Sesion
+import com.estudiante.strennus_proyweb.entities.Usuario
 
 @Database(entities = [
     Usuario::class,

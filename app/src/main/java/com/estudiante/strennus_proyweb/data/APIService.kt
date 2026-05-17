@@ -1,5 +1,6 @@
-package com.estudiante.strennus_proyweb
+package com.estudiante.strennus_proyweb.data
 
+import com.estudiante.strennus_proyweb.data.ExerciseResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

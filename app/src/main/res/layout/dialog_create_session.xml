@@ -3,18 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:layout_margin="16dp"
-    android:background="@drawable/bg_rounded_card">
+    android:layout_height="match_parent"
+    android:background="@color/gray_darker">
 
-    <!-- Header -->
     <LinearLayout
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="12dp"
+        android:padding="16dp"
         android:gravity="center_vertical"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -25,7 +22,7 @@
             android:text="Nueva Sesión"
             android:textColor="@color/white"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
 
         <ImageButton
             android:id="@+id/btnClose"
@@ -34,7 +31,7 @@
             android:background="@drawable/bg_circle_red"
             android:src="@drawable/ic_close"
             android:tint="@color/white"
-            android:padding="8dp" />
+            android:padding="8dp"/>
 
     </LinearLayout>
 
@@ -42,36 +39,38 @@
         android:id="@+id/divider1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray_darker"
-        app:layout_constraintTop_toBottomOf="@id/headerLayout" />
+        android:background="@color/gray_dark"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout"/>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxHeight="600dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
         app:layout_constraintTop_toBottomOf="@id/divider1"
         app:layout_constraintBottom_toTopOf="@id/btnSaveSession">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="8dp">
 
-            <!-- Nombre Sesion -->
             <EditText
                 android:id="@+id/etSessionName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="8dp"
                 android:background="@drawable/bg_rounded_card"
                 android:hint="Nombre de la sesión"
                 android:inputType="text"
-                android:padding="12dp"
+                android:padding="14dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/gray_light"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
-            <!-- Notas -->
             <EditText
                 android:id="@+id/etSessionNotes"
                 android:layout_width="match_parent"
@@ -83,12 +82,11 @@
                 android:hint="Notas (opcional)..."
                 android:inputType="text"
                 android:maxLines="1"
-                android:padding="10dp"
+                android:padding="14dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/gray_light"
-                android:textSize="12sp" />
+                android:textSize="12sp"/>
 
-            <!-- Ejercicios Seleccionados -->
             <LinearLayout
                 android:id="@+id/selectedExercisesSection"
                 android:layout_width="match_parent"
@@ -110,7 +108,7 @@
                         android:text="Ejercicios agregados"
                         android:textColor="@color/white"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/tvDuration"
@@ -119,7 +117,7 @@
                         android:text="0 min"
                         android:textColor="@color/red_primary"
                         android:textSize="10sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                 </LinearLayout>
 
@@ -127,19 +125,16 @@
                     android:id="@+id/rvSelectedExercises"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxHeight="150dp"
-                    android:nestedScrollingEnabled="false" />
+                    android:nestedScrollingEnabled="false"/>
 
             </LinearLayout>
 
-            <!-- Divider -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/gray_darker"
-                android:layout_marginVertical="8dp" />
+                android:background="@color/gray_dark"
+                android:layout_marginBottom="8dp"/>
 
-            <!-- Barra de Busqueda -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -151,7 +146,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:cardBackgroundColor="@color/gray_darker"
+                    app:cardBackgroundColor="@color/gray_dark"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="0dp">
 
@@ -167,7 +162,7 @@
                             android:layout_height="16dp"
                             android:src="@drawable/ic_search"
                             android:tint="@color/gray_light"
-                            android:layout_marginEnd="8dp" />
+                            android:layout_marginEnd="8dp"/>
 
                         <EditText
                             android:id="@+id/etSearchExercise"
@@ -178,7 +173,7 @@
                             android:inputType="text"
                             android:textColor="@color/white"
                             android:textColorHint="@color/gray_light"
-                            android:textSize="12sp" />
+                            android:textSize="12sp"/>
 
                     </LinearLayout>
 
@@ -197,25 +192,24 @@
                     app:iconTint="@color/white"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
-                    android:padding="0dp" />
+                    android:padding="0dp"/>
 
             </LinearLayout>
 
-            <!-- Lista Ejercicios -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvAvailableExercises"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:paddingHorizontal="12dp"
-                android:paddingBottom="8dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:clipToPadding="false"
-                android:nestedScrollingEnabled="true" />
+                android:nestedScrollingEnabled="true"
+                android:paddingHorizontal="12dp"
+                android:paddingBottom="8dp" />
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Boton Guardar -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSaveSession"
         android:layout_width="match_parent"
@@ -228,6 +222,6 @@
         android:textStyle="bold"
         app:cornerRadius="24dp"
         android:paddingVertical="12dp"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

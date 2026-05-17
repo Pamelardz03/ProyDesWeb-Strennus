@@ -1,4 +1,4 @@
-package com.estudiante.strennus_proyweb
+package com.estudiante.strennus_proyweb.data
 
 import com.google.gson.annotations.SerializedName
 
