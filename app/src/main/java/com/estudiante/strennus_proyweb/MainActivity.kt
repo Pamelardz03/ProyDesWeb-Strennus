@@ -19,17 +19,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        loadFragment(ExerciseCatalogFragment())
+loadFragment(HomeFragment())
 
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.navigation_home -> loadFragment(HomeFragment())
-                R.id.navigation_sessions -> loadFragment(SessionsFragment())
-                R.id.navigation_ranking -> loadFragment(RankingFragment())
-                R.id.navigation_profile -> loadFragment(ProfileFragment())
-            }
-            true
-        }
+binding.bottomNavigation.setOnItemSelectedListener { item ->
+    when (item.itemId) {
+        R.id.navigation_home -> loadFragment(HomeFragment())
+        R.id.navigation_sessions -> loadFragment(SessionsFragment())
+        R.id.navigation_ranking -> loadFragment(RankingFragment())
+        R.id.navigation_profile -> loadFragment(ProfileFragment())
+    }
+    true
+}
+
+binding.bottomNavigation.selectedItemId = R.id.navigation_home
     }
 
     private fun loadFragment(fragment: Fragment) {

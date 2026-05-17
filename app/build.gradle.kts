@@ -41,8 +41,23 @@ android {
 }
 
 dependencies {
+    // Room - Base de datos local
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
+    
+    // Networking
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
+    
+    // Carga de imagenes
+    implementation(libs.coil)
+    
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.android)
+    
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

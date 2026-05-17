@@ -13,7 +13,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Sesiones Tarjeta -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,7 +56,6 @@
 
                 </LinearLayout>
 
-                <!-- RecyclerView para las sesiones -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvSessionsPreview"
                     android:layout_width="match_parent"
@@ -69,7 +67,7 @@
                     android:id="@+id/btnNewSession"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="+ Nueva sesión"
+                    android:text="Nueva sesión"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -125,7 +123,6 @@
 
                 </LinearLayout>
 
-                <!-- Contador Pasos -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -152,7 +149,6 @@
 
                 </LinearLayout>
 
-                <!-- Barra de Progreso -->
                 <ProgressBar
                     android:id="@+id/progressSteps"
                     style="?android:attr/progressBarStyleHorizontal"
@@ -167,7 +163,6 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Actividad Diaria Tarjeta -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -294,7 +289,6 @@
 
                     </LinearLayout>
 
-                    <!-- Circulo Progreso Caminata -->
                     <FrameLayout
                         android:layout_width="128dp"
                         android:layout_height="128dp">

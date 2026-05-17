@@ -4,33 +4,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardBackgroundColor="@color/gray_darker"
-    app:cardCornerRadius="12dp"
+    android:layout_margin="16dp"
+    app:cardBackgroundColor="@color/gray_dark"
+    app:cardCornerRadius="16dp"
     app:cardElevation="0dp"
-    android:foreground="?attr/selectableItemBackground">
+    app:strokeColor="@color/gray_darker"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="12dp"
+        android:padding="16dp"
         android:gravity="center_vertical">
 
+        <!-- Ícono circular con inicial -->
         <FrameLayout
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:background="@drawable/bg_circle_red">
 
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+            <TextView
+                android:id="@+id/tvExerciseInitial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_activity"
-                android:tint="@color/white" />
+                android:text="E"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
         </FrameLayout>
 
+        <!-- Nombre del ejercicio y músculo -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -38,53 +44,31 @@
             android:orientation="vertical"
             android:layout_marginStart="12dp">
 
+            <!-- Nombre - campo "name" de la API -->
             <TextView
                 android:id="@+id/tvExerciseName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Press banca"
+                android:text="Nombre del ejercicio"
                 android:textColor="@color/white"
-                android:textSize="12sp"
-                android:textStyle="bold" />
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end" />
 
-            <LinearLayout
+            <!-- Músculo - campo "muscle" de la API -->
+            <TextView
+                android:id="@+id/tvExerciseDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="2dp">
-
-                <TextView
-                    android:id="@+id/tvExerciseCategory"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Pecho"
-                    android:textColor="@color/gray_light"
-                    android:textSize="10sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" • "
-                    android:textColor="@color/gray_light"
-                    android:textSize="10sp" />
-
-                <TextView
-                    android:id="@+id/tvExerciseIntensity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Alta"
-                    android:textSize="10sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
+                android:text="Músculo"
+                android:textColor="@color/gray_light"
+                android:textSize="12sp"
+                android:layout_marginTop="2dp"
+                android:maxLines="1"
+                android:ellipsize="end" />
 
         </LinearLayout>
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_add"
-            android:tint="@color/gray_light" />
 
     </LinearLayout>
 
