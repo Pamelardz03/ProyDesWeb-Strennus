@@ -1,4 +1,4 @@
-package com.estudiante.strennus_proyweb.viewmodel
+package com.estudiante.strennus_proyweb.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -4,36 +4,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="6dp"
-    app:cardBackgroundColor="@color/gray_darker"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="0dp">
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginBottom="8dp"
+    app:cardBackgroundColor="@color/gray_dark"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/gray_darker"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="12dp">
 
+        <!-- Header: nombre + contador + editar + eliminar -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="6dp">
+            android:layout_marginBottom="8dp">
 
             <FrameLayout
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:background="@drawable/bg_circle_red">
-
                 <ImageView
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_activity"
                     android:tint="@color/white" />
-
             </FrameLayout>
 
             <TextView
@@ -41,119 +43,136 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="6dp"
-                android:text="Press banca"
+                android:layout_marginStart="8dp"
+                android:text="Nombre del ejercicio"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <!-- Contador de series — visible cuando está colapsado -->
+            <TextView
+                android:id="@+id/tvSeriesCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 series"
+                android:textColor="@color/red_primary"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp" />
+
+            <!-- Botón editar — visible solo cuando está colapsado (guardado) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnEditExercise"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:backgroundTint="@color/gray_darker"
+                android:text="Editar"
                 android:textColor="@color/white"
                 android:textSize="10sp"
-                android:textStyle="bold" />
+                android:visibility="gone"
+                app:cornerRadius="8dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingHorizontal="8dp"
+                android:layout_marginEnd="4dp" />
 
+            <!-- Eliminar ejercicio -->
             <ImageButton
                 android:id="@+id/btnRemoveExercise"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_close"
-                android:tint="@color/gray_light"
-                android:padding="2dp" />
+                android:tint="@color/gray_light" />
 
         </LinearLayout>
 
-        <!-- Sets, Reps, Rest Inputs -->
+        <!-- Contenido expandible: series -->
         <LinearLayout
+            android:id="@+id/layoutSeriesContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:visibility="visible">
 
-            <!-- Sets -->
+            <!-- Header columnas -->
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginEnd="6dp">
+                android:orientation="horizontal"
+                android:layout_marginBottom="4dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="32dp"
                     android:layout_height="wrap_content"
-                    android:text="Series"
+                    android:text="#"
                     android:textColor="@color/gray_light"
-                    android:textSize="8sp"
-                    android:layout_marginBottom="2dp" />
-
-                <EditText
-                    android:id="@+id/etSets"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_rounded_card"
-                    android:inputType="number"
-                    android:padding="6dp"
-                    android:text="3"
-                    android:textColor="@color/white"
                     android:textSize="10sp"
-                    android:textStyle="bold"
                     android:gravity="center" />
 
-            </LinearLayout>
-
-            <!-- Reps -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginEnd="6dp">
-
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="Reps"
                     android:textColor="@color/gray_light"
-                    android:textSize="8sp"
-                    android:layout_marginBottom="2dp" />
-
-                <EditText
-                    android:id="@+id/etReps"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_rounded_card"
-                    android:inputType="number"
-                    android:padding="6dp"
-                    android:text="12"
-                    android:textColor="@color/white"
                     android:textSize="10sp"
-                    android:textStyle="bold"
-                    android:gravity="center" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                    android:gravity="center"
+                    android:layout_marginStart="8dp" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Descanso (s)"
+                    android:layout_weight="1"
+                    android:text="Peso (kg)"
                     android:textColor="@color/gray_light"
-                    android:textSize="8sp"
-                    android:layout_marginBottom="2dp" />
-
-                <EditText
-                    android:id="@+id/etRestTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_rounded_card"
-                    android:inputType="number"
-                    android:padding="6dp"
-                    android:text="60"
-                    android:textColor="@color/white"
                     android:textSize="10sp"
-                    android:textStyle="bold"
                     android:gravity="center" />
 
+                <View
+                    android:layout_width="24dp"
+                    android:layout_height="1dp" />
+
             </LinearLayout>
+
+            <!-- Filas de series dinámicas -->
+            <LinearLayout
+                android:id="@+id/llSeriesRows"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <!-- Botón + Nueva serie -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddSerie"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/gray_darker"
+                android:text="+ Nueva serie"
+                android:textColor="@color/red_primary"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:cornerRadius="8dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp" />
+
+            <!-- Botón Guardar ejercicio -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSaveExercise"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/red_primary"
+                android:text="Guardar ejercicio"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:cornerRadius="12dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp" />
 
         </LinearLayout>
 
