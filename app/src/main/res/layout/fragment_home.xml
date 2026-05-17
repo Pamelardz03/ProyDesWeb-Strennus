@@ -67,7 +67,7 @@
                     android:id="@+id/btnNewSession"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="+ Nueva sesión"
+                    android:text="Nueva sesión"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="bold"

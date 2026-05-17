@@ -2,13 +2,28 @@ package com.estudiante.strennus_proyweb
 
 import com.google.gson.annotations.SerializedName
 
-// API Ninjas devuelve una lista directa de ejercicios
-// https://api-ninjas.com/api/exercises
+data class ExerciseResponse(
+    @SerializedName("count")   val count: Int,
+    @SerializedName("results") val exercises: List<Exercise>
+)
+
 data class Exercise(
-    @SerializedName("name")         val name: String,
-    @SerializedName("type")         val type: String,
-    @SerializedName("muscle")       val muscle: String,
-    @SerializedName("equipment")    val equipment: String,
-    @SerializedName("difficulty")   val difficulty: String,
-    @SerializedName("instructions") val instructions: String
+    @SerializedName("id")           val id: Int,
+    @SerializedName("translations") val translations: List<Translation>
+) {
+    val name: String
+        get() = translations.firstOrNull { it.language == 2 }?.name
+            ?: translations.firstOrNull()?.name
+            ?: "Sin nombre"
+
+    val description: String
+        get() = translations.firstOrNull { it.language == 2 }?.description
+            ?: translations.firstOrNull()?.description
+            ?: ""
+}
+
+data class Translation(
+    @SerializedName("language")    val language: Int,
+    @SerializedName("name")        val name: String,
+    @SerializedName("description") val description: String
 )

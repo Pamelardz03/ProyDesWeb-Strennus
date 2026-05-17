@@ -29,8 +29,6 @@ class ExercisesFragment : Fragment(),
     private lateinit var adapter: ExerciseAdapter
     private val exerciseList = mutableListOf<Exercise>()
 
-    // API Key de api-ninjas.com
-    private val API_KEY = "446osfaOpVV1z9UXbRUWAoDvASE4qOfBRLucDKhc"
 
     // --- 9.2 Configuración de Retrofit (by lazy) ---
     private val retrofit: Retrofit by lazy {
@@ -42,7 +40,7 @@ class ExercisesFragment : Fragment(),
             .build()
 
         Retrofit.Builder()
-            .baseUrl("https://api.api-ninjas.com/")
+            .baseUrl("https://wger.de/")
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -61,13 +59,6 @@ class ExercisesFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.searchExercise.setOnQueryTextListener(this)
-
-        val searchEditText = binding.searchExercise
-            .findViewById<androidx.appcompat.widget.SearchView.SearchAutoComplete>(
-                androidx.appcompat.R.id.search_src_text
-            )
-        searchEditText.setTextColor(resources.getColor(R.color.white, null))
-        searchEditText.setHintTextColor(resources.getColor(R.color.gray_light, null))
 
         initRecyclerView()
         loadExercises()
@@ -104,13 +95,13 @@ class ExercisesFragment : Fragment(),
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val call = retrofit.create(APIService::class.java)
-                    .getExercises(apiKey = API_KEY)
+                    .getExercises()
 
                 Log.d("ExercisesFragment", "Response: ${call.body()}")
 
                 withContext(Dispatchers.Main) {
                     if (call.isSuccessful) {
-                        val exercises = call.body() ?: emptyList()
+                        val exercises = call.body()?.exercises ?: emptyList<Exercise>()
                         exerciseList.clear()
                         exerciseList.addAll(exercises)
                         adapter.notifyDataSetChanged()
@@ -140,16 +131,16 @@ class ExercisesFragment : Fragment(),
             try {
                 // 3. Hacer la petición HTTP
                 val call = retrofit.create(APIService::class.java)
-                    .getExercises(apiKey = API_KEY, name = query)
+                    .searchExercises(name = query)
 
                 Log.d("ExercisesFragment", "Search: ${call.body()}")
 
                 // 4. Volver al hilo principal para actualizar UI
                 withContext(Dispatchers.Main) {
                     if (call.isSuccessful) {
-                        val exercises = call.body() ?: emptyList()
+                        val exercises = call.body()?.exercises ?: emptyList<Exercise>()
                         exerciseList.clear()
-                        exerciseList.addAll(exercises)
+                        exerciseList.addAll(exercises as List<Exercise>)
                         adapter.notifyDataSetChanged()
                         binding.progressBar.visibility = View.GONE
                         binding.rvExercises.visibility = View.VISIBLE

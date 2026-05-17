@@ -9,8 +9,8 @@ class ExerciseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val binding = ItemExerciseBinding.bind(view)
 
     fun bind(exercise: Exercise) {
-        binding.tvExerciseName.text = exercise.name
-        binding.tvExerciseDescription.text = exercise.muscle
-        binding.tvExerciseInitial.text = exercise.name.firstOrNull()?.uppercase() ?: "E"
+        binding.tvExerciseName.text = exercise.name ?: "Sin nombre"
+        binding.tvExerciseDescription.text = exercise.description ?: ""
+        binding.tvExerciseInitial.text = exercise.name?.firstOrNull()?.uppercase() ?: "E"
     }
 }
