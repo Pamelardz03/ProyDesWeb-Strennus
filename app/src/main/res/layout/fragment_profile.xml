@@ -39,7 +39,7 @@
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:text="Chris Heria"/>
+                android:text="Usuario"/>
 
             <TextView
                 android:id="@+id/tvUserRole"
@@ -49,7 +49,7 @@
                 android:textColor="@color/gray_light"
                 android:textSize="12sp"
                 android:layout_marginBottom="16dp"
-                android:text="Pro Instructor / Fitness Trainer"/>
+                android:text=""/>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -77,7 +77,7 @@
                         android:id="@+id/tvAbout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Fitness influencer that helps you get shredded using calisthenics workouts routines."
+                        android:text="Miembro de Strenuus"
                         android:textColor="@color/gray_light"
                         android:textSize="12sp"
                         android:layout_marginBottom="16dp"/>
@@ -98,7 +98,7 @@
                                 android:id="@+id/tvYears"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="2"
+                                android:text="1"
                                 android:textColor="@color/white"
                                 android:textSize="18sp"
                                 android:textStyle="bold"/>
@@ -146,7 +146,7 @@
                                 android:id="@+id/tvRoutines"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="24"
+                                android:text="0"
                                 android:textColor="@color/white"
                                 android:textSize="18sp"
                                 android:textStyle="bold"/>
@@ -160,6 +160,133 @@
                         </LinearLayout>
 
                     </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_darker"
+                        android:layout_marginVertical="12dp"/>
+
+                    <!-- Online Programs -->
+                    <LinearLayout
+                        android:id="@+id/headerOnlinePrograms"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingVertical="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Online Programs"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold"/>
+
+                        <ImageView
+                            android:id="@+id/iconOnlinePrograms"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_add"
+                            android:tint="@color/gray_light"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/contentOnlinePrograms"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="• Programa de fuerza"
+                            android:textColor="@color/gray_light"
+                            android:textSize="12sp"
+                            android:layout_marginBottom="4dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="• Calistenia avanzada"
+                            android:textColor="@color/gray_light"
+                            android:textSize="12sp"
+                            android:layout_marginBottom="4dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="• Resistencia total"
+                            android:textColor="@color/gray_light"
+                            android:textSize="12sp"/>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_darker"
+                        android:layout_marginVertical="12dp"/>
+
+                    <!-- Social Media -->
+                    <LinearLayout
+                        android:id="@+id/headerSocialMedia"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingVertical="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Social Media"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold"/>
+
+                        <ImageView
+                            android:id="@+id/iconSocialMedia"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_add"
+                            android:tint="@color/gray_light"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/contentSocialMedia"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Instagram: @strenuus"
+                            android:textColor="@color/gray_light"
+                            android:textSize="12sp"
+                            android:layout_marginBottom="4dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="YouTube: Strenuus"
+                            android:textColor="@color/gray_light"
+                            android:textSize="12sp"
+                            android:layout_marginBottom="4dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="TikTok: @strenuus"
+                            android:textColor="@color/gray_light"
+                            android:textSize="12sp"/>
+                    </LinearLayout>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

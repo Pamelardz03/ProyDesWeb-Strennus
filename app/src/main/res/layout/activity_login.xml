@@ -8,13 +8,15 @@
     <!-- Imagen Fondo -->
     <ImageView
         android:id="@+id/backgroundImage"
-        android:layout_width="688dp"
-        android:layout_height="874dp"
-        android:layout_marginStart="-167dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="0dp"
         android:scaleType="centerCrop"
         android:src="@drawable/background"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Titulo -->
     <TextView
@@ -36,8 +38,8 @@
         android:id="@+id/loginCard"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="41dp"
-        android:layout_marginTop="109dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="40dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="35dp"
         app:cardElevation="4dp"

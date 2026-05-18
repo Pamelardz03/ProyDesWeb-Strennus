@@ -22,6 +22,29 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Datos del usuario desde SharedPreferences ya guardados
+        val prefs = requireContext().getSharedPreferences("strenuus_prefs", android.content.Context.MODE_PRIVATE)
+        binding.tvUserName.text = prefs.getString("usuario_name", "Usuario")
+        binding.tvUserRole.text = "@" + prefs.getString("usuario_username", "")
+
+        // Expandir y Cerrar Detalles
+        binding.headerOnlinePrograms.setOnClickListener {
+            if (binding.contentOnlinePrograms.visibility == View.GONE) {
+                binding.contentOnlinePrograms.visibility = View.VISIBLE
+            } else {
+                binding.contentOnlinePrograms.visibility = View.GONE
+            }
+        }
+
+        // Expandir y Cerrar Detalles
+        binding.headerSocialMedia.setOnClickListener {
+            if (binding.contentSocialMedia.visibility == View.GONE) {
+                binding.contentSocialMedia.visibility = View.VISIBLE
+            } else {
+                binding.contentSocialMedia.visibility = View.GONE
+            }
+        }
+
         binding.btnLogout.setOnClickListener {
             val intent = Intent(requireContext(), LogInActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
