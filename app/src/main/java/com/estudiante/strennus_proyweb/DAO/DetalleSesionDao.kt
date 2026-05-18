@@ -24,4 +24,7 @@ interface DetalleSesionDao {
 
     @Query("DELETE FROM detalle_sesion WHERE sesionId = :sesionId")
     suspend fun eliminarPorSesion(sesionId: Int)
+
+    @Query("SELECT * FROM detalle_sesion WHERE sesionId = :sesionId")
+    suspend fun getDetallesBySesion(sesionId: Int): List<DetalleSesion>
 }

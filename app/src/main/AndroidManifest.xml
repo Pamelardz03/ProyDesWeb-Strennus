@@ -14,25 +14,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Strenuus">
-
+        <activity
+            android:name=".ui.SessionSummaryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ActiveSessionActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.Strenuus.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.LogInActivity"
             android:exported="false" />
-
         <activity
             android:name=".ui.RegisterActivity"
             android:exported="false" />
-
         <activity
             android:name=".ui.MainActivity"
             android:exported="false" />

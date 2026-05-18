@@ -10,18 +10,20 @@ import com.estudiante.strennus_proyweb.repository.AppRepository
 import kotlinx.coroutines.launch
 
 class SessionViewModel(private val repository: AppRepository) : ViewModel() {
-    private lateinit var _sesionActual: LiveData<Sesion>
-    val sesionActual get() = _sesionActual
 
-    private lateinit var _ejercicios: LiveData<List<DetalleSesion>>
-    val ejercicios get() = _ejercicios
+    private val _sesionActual = MutableLiveData<Sesion?>()
+    val sesionActual: LiveData<Sesion?> get() = _sesionActual
 
-    private val _sesionId = MutableLiveData<Int>()
+    private val _ejercicios = MutableLiveData<List<DetalleSesion>>()
+    val ejercicios: LiveData<List<DetalleSesion>> get() = _ejercicios
 
     fun cargarSesion(sesionId: Int) {
-        _sesionActual = repository.obtenerSesionPorId(sesionId)
-        _ejercicios = repository.obtenerDetallePorSesion(sesionId)
-        _sesionId.value = sesionId
+        repository.obtenerSesionPorId(sesionId).observeForever { sesion ->
+            _sesionActual.value = sesion
+        }
+        repository.obtenerDetallePorSesion(sesionId).observeForever { detalles ->
+            _ejercicios.value = detalles
+        }
     }
 
     fun crearSesion(sesion: Sesion, onCreada: (Long) -> Unit) {
@@ -32,30 +34,21 @@ class SessionViewModel(private val repository: AppRepository) : ViewModel() {
     }
 
     fun agregarEjercicio(detalle: DetalleSesion) {
-        viewModelScope.launch {
-            repository.insertarDetalle(detalle)
-        }
+        viewModelScope.launch { repository.insertarDetalle(detalle) }
     }
 
     fun editarEjercicio(detalle: DetalleSesion) {
-        viewModelScope.launch {
-            repository.actualizarDetalle(detalle)
-        }
+        viewModelScope.launch { repository.actualizarDetalle(detalle) }
     }
 
     fun eliminarEjercicio(detalle: DetalleSesion) {
-        viewModelScope.launch {
-            repository.eliminarDetalle(detalle)
-        }
+        viewModelScope.launch { repository.eliminarDetalle(detalle) }
     }
 
     fun finalizarSesion(sesion: Sesion, horaFin: Long) {
         viewModelScope.launch {
             val duracion = ((horaFin - sesion.horaInicio) / 60000).toInt()
-            val sesionFinalizada = sesion.copy(
-                horaFin = horaFin,
-                duracionMinutos = duracion
-            )
+            val sesionFinalizada = sesion.copy(horaFin = horaFin, duracionMinutos = duracion)
             repository.actualizarSesion(sesionFinalizada)
         }
     }
