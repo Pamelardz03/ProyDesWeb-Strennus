@@ -22,4 +22,10 @@ interface UsuarioDao {
 
     @Query("SELECT * FROM usuarios WHERE id = :id")
     fun getbyID(id: Int): LiveData<Usuario>
+
+    @Query("SELECT * FROM usuarios WHERE name = :name LIMIT 1")
+    suspend fun getByName(name: String): Usuario?
+
+    @Query("SELECT * FROM usuarios WHERE username = :username AND password = :password LIMIT 1")
+    suspend fun login(username: String, password: String): Usuario?
 }
