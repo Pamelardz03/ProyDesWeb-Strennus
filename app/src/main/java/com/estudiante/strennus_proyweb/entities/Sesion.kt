@@ -17,6 +17,7 @@ data class Sesion(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val usuarioId: Int,
+    val nombre: String = "Sin nombre",   // ← campo nuevo
     val fecha: Long,
     val horaInicio: Long,
     val horaFin: Long? = null,

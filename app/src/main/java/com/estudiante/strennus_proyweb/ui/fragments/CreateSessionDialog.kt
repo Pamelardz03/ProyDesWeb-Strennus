@@ -1,5 +1,6 @@
 package com.estudiante.strennus_proyweb.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -53,8 +54,12 @@ class CreateSessionDialog : DialogFragment() {
     private var isLoading = false
     private var isSearchMode = true
 
-    // ID del usuario logueado — igual que en HomeFragment
-    private val usuarioId = 1
+    // Leer el usuario logueado de SharedPreferences
+    private val usuarioId by lazy {
+        requireContext()
+            .getSharedPreferences("strenuus_prefs", Context.MODE_PRIVATE)
+            .getInt("usuario_id", -1)
+    }
 
     private val retrofit: Retrofit by lazy {
         val logging = HttpLoggingInterceptor().apply {
@@ -97,7 +102,6 @@ class CreateSessionDialog : DialogFragment() {
         setupListeners()
     }
 
-    // ─── ViewModel con la BD ─────────────────────────────────────────────────
     private fun setupViewModel() {
         val db = AppDataBase.getInstance(requireContext())
         val repository = AppRepository(
@@ -110,7 +114,6 @@ class CreateSessionDialog : DialogFragment() {
         sesionViewModel = ViewModelProvider(this, factory)[SessionViewModel::class.java]
     }
 
-    // ─── RecyclerView ejercicios disponibles ─────────────────────────────────
     private fun initAvailableRecyclerView() {
         availableAdapter = ExerciseAdapter(exerciseList) { exercise ->
             addExerciseToSession(exercise)
@@ -129,7 +132,6 @@ class CreateSessionDialog : DialogFragment() {
         })
     }
 
-    // ─── RecyclerView ejercicios seleccionados ───────────────────────────────
     private fun initSelectedRecyclerView() {
         selectedAdapter = SelectedExerciseAdapter(selectedExercises) { ejercicio ->
             selectedExercises.remove(ejercicio)
@@ -142,7 +144,6 @@ class CreateSessionDialog : DialogFragment() {
         binding.rvSelectedExercises.isNestedScrollingEnabled = false
     }
 
-    // ─── Listeners ───────────────────────────────────────────────────────────
     private fun setupListeners() {
         binding.btnClose.setOnClickListener { dismiss() }
         binding.btnSaveSession.setOnClickListener { saveSession() }
@@ -176,20 +177,12 @@ class CreateSessionDialog : DialogFragment() {
         }
     }
 
-    // ─── Modos de vista ──────────────────────────────────────────────────────
     private fun showSearchMode() {
         isSearchMode = true
         binding.rvAvailableExercises.visibility = View.VISIBLE
         if (selectedExercises.isNotEmpty()) {
             binding.selectedExercisesSection.visibility = View.VISIBLE
         }
-    }
-
-    private fun showSelectedMode() {
-        isSearchMode = false
-        binding.rvAvailableExercises.visibility = View.GONE
-        binding.selectedExercisesSection.visibility = View.VISIBLE
-        binding.etSearchExercise.clearFocus()
     }
 
     private fun updateSelectedSection() {
@@ -202,7 +195,6 @@ class CreateSessionDialog : DialogFragment() {
         }
     }
 
-    // ─── Agregar ejercicio ───────────────────────────────────────────────────
     private fun addExerciseToSession(exercise: Exercise) {
         val existing = selectedExercises.find { it.nombre == exercise.name }
         if (existing != null) {
@@ -210,11 +202,9 @@ class CreateSessionDialog : DialogFragment() {
             selectedAdapter.notifyDataSetChanged()
             Toast.makeText(requireContext(), "Serie agregada a ${exercise.name}", Toast.LENGTH_SHORT).show()
         } else {
-            val nuevo = EjercicioConSeries(
-                nombre = exercise.name,
-                series = mutableListOf(SerieTemp())
+            selectedExercises.add(
+                EjercicioConSeries(nombre = exercise.name, series = mutableListOf(SerieTemp()))
             )
-            selectedExercises.add(nuevo)
             selectedAdapter.notifyDataSetChanged()
             Toast.makeText(requireContext(), "${exercise.name} agregado", Toast.LENGTH_SHORT).show()
         }
@@ -222,7 +212,6 @@ class CreateSessionDialog : DialogFragment() {
         binding.selectedExercisesSection.visibility = View.VISIBLE
     }
 
-    // ─── Guardar sesión en BD ────────────────────────────────────────────────
     private fun saveSession() {
         val nombre = binding.etSessionName.text.toString().trim()
         if (nombre.isEmpty()) {
@@ -233,23 +222,26 @@ class CreateSessionDialog : DialogFragment() {
             Toast.makeText(requireContext(), "Agrega al menos un ejercicio", Toast.LENGTH_SHORT).show()
             return
         }
+        if (usuarioId == -1) {
+            Toast.makeText(requireContext(), "Error: no hay usuario logueado", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         val ahora = System.currentTimeMillis()
         val sesion = Sesion(
             usuarioId = usuarioId,
+            nombre = nombre,
             fecha = ahora,
             horaInicio = ahora
         )
 
-        // 1. Crear la sesión en BD y obtener su ID
         sesionViewModel.crearSesion(sesion) { sesionId ->
-            // 2. Por cada ejercicio, por cada serie → guardar un DetalleSesion
-            selectedExercises.forEachIndexed { ejercicioIndex, ejercicio ->
-                ejercicio.series.forEachIndexed { serieIndex, serie ->
+            selectedExercises.forEach { ejercicio ->
+                ejercicio.series.forEachIndexed { index, serie ->
                     val detalle = DetalleSesion(
                         sesionId = sesionId.toInt(),
                         nombreEjercicio = ejercicio.nombre,
-                        series = serieIndex + 1,
+                        series = index + 1,
                         repeticiones = serie.reps,
                         peso = serie.peso,
                         notas = null
@@ -257,25 +249,21 @@ class CreateSessionDialog : DialogFragment() {
                     sesionViewModel.agregarEjercicio(detalle)
                 }
             }
-
-            // 3. Confirmar y cerrar
             requireActivity().runOnUiThread {
                 Toast.makeText(
                     requireContext(),
-                    "Sesión \"$nombre\" guardada con ${selectedExercises.size} ejercicios",
-                    Toast.LENGTH_LONG
+                    "Sesión \"$nombre\" guardada",
+                    Toast.LENGTH_SHORT
                 ).show()
                 dismiss()
             }
         }
     }
 
-    // ─── Retrofit ────────────────────────────────────────────────────────────
     private fun loadExercises() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val call = retrofit.create(APIService::class.java).getExercises()
-                Log.d("CreateSessionDialog", "Code: ${call.code()}")
                 withContext(Dispatchers.Main) {
                     if (call.isSuccessful) {
                         val exercises = call.body()?.exercises ?: emptyList()

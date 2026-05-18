@@ -15,7 +15,7 @@ import com.estudiante.strennus_proyweb.entities.Usuario
 
 @Database(
     entities = [Usuario::class, Sesion::class, DetalleSesion::class, Rutina::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDataBase : RoomDatabase() {

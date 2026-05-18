@@ -1,12 +1,10 @@
 package com.estudiante.strennus_proyweb.ui.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.estudiante.strennus_proyweb.R
 import com.estudiante.strennus_proyweb.databinding.ItemSessionBinding
 import com.estudiante.strennus_proyweb.entities.Sesion
 import java.text.SimpleDateFormat
@@ -34,26 +32,29 @@ class SesionAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(sesion: Sesion) {
-            // Formato de fecha legible
             val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
             val fechaStr = sdf.format(Date(sesion.fecha))
 
-            binding.tvSessionName.text = "Sesión del $fechaStr"
+            // Mostrar el nombre que el usuario escribió
+            binding.tvSessionName.text = sesion.nombre
 
-            // Detalles: duración si está finalizada, o "En progreso"
-            val detalles = if (sesion.duracionMinutos != null) {
+            // Detalles: duración si está finalizada
+            binding.tvSessionDetails.text = if (sesion.duracionMinutos != null) {
                 "${sesion.duracionMinutos} min • $fechaStr"
             } else {
-                "En progreso • $fechaStr"
+                fechaStr
             }
-            binding.tvSessionDetails.text = detalles
 
+            // Click en la tarjeta → ver detalle
             binding.root.setOnClickListener { onItemClick(sesion) }
+
+            // Click en eliminar
+            binding.btnDelete.setOnClickListener { onDeleteClick(sesion) }
         }
     }
 
     class SesionDiffCallback : DiffUtil.ItemCallback<Sesion>() {
-        override fun areItemsTheSame(oldItem: Sesion, newItem: Sesion) = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: Sesion, newItem: Sesion) = oldItem == newItem
+        override fun areItemsTheSame(old: Sesion, new: Sesion) = old.id == new.id
+        override fun areContentsTheSame(old: Sesion, new: Sesion) = old == new
     }
 }

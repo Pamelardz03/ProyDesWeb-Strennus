@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    app:cardBackgroundColor="@color/gray_dark"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/gray_darker"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <!-- Header: nombre + contador + toggle -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <FrameLayout
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/bg_circle_red">
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_activity"
+                    android:tint="@color/white" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tvEjercicioNombre"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="Ejercicio"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/tvSeriesCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 series"
+                android:textColor="@color/red_primary"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp" />
+
+            <ImageButton
+                android:id="@+id/btnToggleDetalle"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_add"
+                android:tint="@color/gray_light" />
+
+        </LinearLayout>
+
+        <!-- Series (colapsado por defecto) -->
+        <LinearLayout
+            android:id="@+id/llSeriesDetalle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp"
+            android:visibility="gone">
+
+            <!-- Header columnas -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="4dp">
+
+                <TextView
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:text="#"
+                    android:textColor="@color/gray_light"
+                    android:textSize="10sp"
+                    android:gravity="center" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Reps"
+                    android:textColor="@color/gray_light"
+                    android:textSize="10sp"
+                    android:gravity="center" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Peso"
+                    android:textColor="@color/gray_light"
+                    android:textSize="10sp"
+                    android:gravity="center" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
