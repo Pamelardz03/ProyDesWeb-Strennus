@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.estudiante.strennus_proyweb.R
 
 class ActiveSessionActivity : AppCompatActivity() {
 
@@ -61,6 +62,10 @@ class ActiveSessionActivity : AppCompatActivity() {
             withContext(Dispatchers.Main) {
                 ejercicios = nombres
                 if (ejercicios.isNotEmpty()) {
+                    val primerDetalle = detalles.firstOrNull()
+                    totalSeries = primerDetalle?.series ?: 3
+                    totalReps = primerDetalle?.repeticiones ?: 15
+
                     mostrarEjercicioActual()
                     iniciarTimer(totalReps * 3)
                 }
@@ -73,12 +78,27 @@ class ActiveSessionActivity : AppCompatActivity() {
             irAResumen()
             return
         }
-        binding.tvExerciseName.text = ejercicios[ejercicioActual]
-        binding.tvSetInfo.text = "Serie $serieActual de $totalSeries"
-        binding.tvStatus.text = "$totalReps repeticiones"
-        binding.tvProgress.text = "${ejercicioActual + 1}/${ejercicios.size}"
-        binding.progressBar.progress = ((ejercicioActual + 1) * 100 / ejercicios.size)
-        enDescanso = false
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val db = AppDataBase.getInstance(this@ActiveSessionActivity)
+            val detalles = db.detalleDao().getDetallesBySesion(sesionId)
+            val detalleActual = detalles.filter {
+                it.nombreEjercicio == ejercicios[ejercicioActual]
+            }.firstOrNull()
+
+            withContext(Dispatchers.Main) {
+                totalSeries = detalleActual?.series ?: 3
+                totalReps = detalleActual?.repeticiones ?: 15
+
+                binding.tvExerciseName.text = ejercicios[ejercicioActual]
+                binding.tvSetInfo.text = "Serie $serieActual de $totalSeries"
+                binding.tvStatus.text = "$totalReps repeticiones"
+                binding.tvProgress.text = "${ejercicioActual + 1}/${ejercicios.size}"
+                binding.progressBar.progress = ((ejercicioActual + 1) * 100 / ejercicios.size)
+                binding.statusBadge.setCardBackgroundColor(getColor(R.color.red_primary))
+                enDescanso = false
+            }
+        }
     }
 
     private fun iniciarTimer(segundos: Int) {
@@ -87,7 +107,14 @@ class ActiveSessionActivity : AppCompatActivity() {
 
         timer = object : CountDownTimer(segundos * 1000L, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                binding.tvTimer.text = (millisUntilFinished / 1000).toString()
+                val segundosRestantes = (millisUntilFinished / 1000).toInt()
+                binding.tvTimer.text = segundosRestantes.toString()
+
+                if (!enDescanso) {
+                    val repsActuales = kotlin.math.ceil(segundosRestantes / 3.0).toInt()
+
+                    binding.tvRepsRemaining.text = "~$repsActuales reps restantes"
+                }
             }
 
             override fun onFinish() {
@@ -102,6 +129,8 @@ class ActiveSessionActivity : AppCompatActivity() {
                 enDescanso = true
                 binding.tvSetInfo.text = "Serie ${serieActual + 1} de $totalSeries"
                 binding.tvStatus.text = "Descanso"
+                binding.tvRepsRemaining.text = ""
+                binding.statusBadge.setCardBackgroundColor(getColor(R.color.yellow_intensity))
                 iniciarTimer(tiempoDescanso)
             } else {
                 serieActual = 1
