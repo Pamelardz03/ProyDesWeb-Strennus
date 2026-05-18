@@ -64,7 +64,6 @@ class SessionsFragment : Fragment() {
     private fun setupRecyclerView() {
         sesionAdapter = SesionAdapter(
             onItemClick = { sesion ->
-                // Al hacer click abre el detalle de la sesión
                 val detailFragment = SessionDetailFragment.newInstance(sesion.id)
                 parentFragmentManager.beginTransaction()
                     .replace(com.estudiante.strennus_proyweb.R.id.viewPager, detailFragment)

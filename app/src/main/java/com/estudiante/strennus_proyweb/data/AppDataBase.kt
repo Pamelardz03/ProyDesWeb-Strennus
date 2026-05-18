@@ -34,8 +34,9 @@ abstract class AppDataBase : RoomDatabase() {
                     context.applicationContext,
                     AppDataBase::class.java,
                     "strennus_database"
-                ).build()
-                INSTANCE = instance
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 instance
             }
         }
