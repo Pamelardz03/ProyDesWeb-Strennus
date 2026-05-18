@@ -36,13 +36,6 @@ class SessionDetailFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupViewModel()
-        observeViewModel()
-        binding.btnBack.setOnClickListener { parentFragmentManager.popBackStack() }
-    }
-
     private fun setupViewModel() {
         val db = AppDataBase.getInstance(requireContext())
         val repository = AppRepository(
@@ -50,7 +43,25 @@ class SessionDetailFragment : Fragment() {
         )
         val factory = AppViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[SessionViewModel::class.java]
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupViewModel()
+        observeViewModel()
         viewModel.cargarSesion(sesionId)
+
+        binding.btnBack.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+
+        binding.btnStartSession.setOnClickListener {
+            android.util.Log.d("DEBUG", "sesionId = $sesionId")
+            val intent = android.content.Intent(requireContext(),
+                com.estudiante.strennus_proyweb.ui.ActiveSessionActivity::class.java)
+            intent.putExtra("sesion_id", sesionId)
+            startActivity(intent)
+        }
     }
 
     private fun observeViewModel() {
