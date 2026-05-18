@@ -146,6 +146,15 @@ class CreateSessionDialog : DialogFragment() {
 
     private fun setupListeners() {
         binding.btnClose.setOnClickListener { dismiss() }
+        binding.btnCreateExercise.setOnClickListener {
+            val dialog = CreateExerciseDialog { ejercicio ->
+                selectedExercises.add(ejercicio)
+                selectedAdapter.notifyDataSetChanged()
+                binding.selectedExercisesSection.visibility = View.VISIBLE
+                Toast.makeText(requireContext(), "${ejercicio.nombre} creado y agregado", Toast.LENGTH_SHORT).show()
+            }
+            dialog.show(parentFragmentManager, "CreateExerciseDialog")
+        }
         binding.btnSaveSession.setOnClickListener { saveSession() }
 
         binding.etSearchExercise.addTextChangedListener(object : TextWatcher {
@@ -176,6 +185,7 @@ class CreateSessionDialog : DialogFragment() {
             if (hasFocus && !isSearchMode) showSearchMode()
         }
     }
+
 
     private fun showSearchMode() {
         isSearchMode = true
