@@ -7,15 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.estudiante.strennus_proyweb.DAO.DetalleSesionDao
-import com.estudiante.strennus_proyweb.DAO.RutinaDao
-import com.estudiante.strennus_proyweb.DAO.SesionDao
-import com.estudiante.strennus_proyweb.DAO.UsuarioDao
 import com.estudiante.strennus_proyweb.data.AppDataBase
 import com.estudiante.strennus_proyweb.databinding.FragmentHomeBinding
 import com.estudiante.strennus_proyweb.repository.AppRepository
 import com.estudiante.strennus_proyweb.ui.adapters.SesionAdapter
-//import com.estudiante.strennus_proyweb.viewmodels.AppViewModelFactory
+import com.estudiante.strennus_proyweb.viewmodels.AppViewModelFactory
 import com.estudiante.strennus_proyweb.viewmodels.HomeViewModel
 
 class HomeFragment : Fragment() {
@@ -26,8 +22,10 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
     private lateinit var sesionAdapter: SesionAdapter
 
-    // ID del usuario logueado — en un proyecto real vendría de SharedPreferences/Session
-    private val usuarioId = 1
+    private val usuarioId by lazy {
+        requireContext().getSharedPreferences("strenuus_prefs", android.content.Context.MODE_PRIVATE)
+            .getInt("usuario_id", 1)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,17 +38,16 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //setupViewModel()
+        setupViewModel()
         setupRecyclerView()
-        //observeViewModel()
+        observeViewModel()
 
-        // Abrir el diálogo de nueva sesión
         binding.btnNewSession.setOnClickListener {
             val dialog = CreateSessionDialog()
             dialog.show(parentFragmentManager, "CreateSessionDialog")
         }
     }
-/*
+
     private fun setupViewModel() {
         val db = AppDataBase.getInstance(requireContext())
         val repository = AppRepository(
@@ -59,22 +56,19 @@ class HomeFragment : Fragment() {
             db.detalleDao(),
             db.rutinaDao()
         )
-        val factory = com.estudiante.strennus_proyweb.viewmodels.AppViewModelFactory(repository)
+        val factory = AppViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
         viewModel.cargarSesiones(usuarioId)
     }
 
- */
-
     private fun setupRecyclerView() {
         sesionAdapter = SesionAdapter(
             onItemClick = { sesion ->
-                // Navegar a SessionsFragment pasando el id de la sesión
-                //val fragment = SessionsFragment.newInstance(sesion.id)
-                //parentFragmentManager.beginTransaction()
-                    //.replace(com.estudiante.strennus_proyweb.R.id.viewPager, fragment)
-                    //.addToBackStack(null)
-                    //.commit()
+                val fragment = SessionDetailFragment.newInstance(sesion.id)
+                parentFragmentManager.beginTransaction()
+                    .replace(com.estudiante.strennus_proyweb.R.id.viewPager, fragment)
+                    .addToBackStack(null)
+                    .commit()
             },
             onDeleteClick = { sesion ->
                 viewModel.eliminarSesion(sesion)
@@ -87,15 +81,12 @@ class HomeFragment : Fragment() {
             setHasFixedSize(false)
         }
     }
-/*
+
     private fun observeViewModel() {
-        // observe() conecta el LiveData al ciclo de vida del Fragment
         viewModel.sesiones.observe(viewLifecycleOwner) { listaSesiones ->
             sesionAdapter.submitList(listaSesiones)
         }
     }
-
- */
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -106,5 +97,3 @@ class HomeFragment : Fragment() {
         fun newInstance() = HomeFragment()
     }
 }
-
-
