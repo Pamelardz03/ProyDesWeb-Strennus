@@ -21,5 +21,7 @@ data class Sesion(
     val fecha: Long,
     val horaInicio: Long,
     val horaFin: Long? = null,
-    val duracionMinutos: Int? = null
+    val duracionMinutos: Int? = null,
+    val imagenPath: String? = null,
+    val notas: String? = null
 )

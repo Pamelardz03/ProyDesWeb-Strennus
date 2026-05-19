@@ -20,6 +20,7 @@ class HomeViewModel(private val repository: AppRepository) : ViewModel() {
         _sesiones = repository.obtenerSesionesPorUsuario(usuarioId)
     }
 
+
     fun cargarUsuario(usuarioId: Int) {
         _usuario = repository.obtenerUsuarioPorId(usuarioId)
     }

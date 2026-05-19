@@ -25,6 +25,8 @@ class AppRepository(
     suspend fun actualizarSesion(sesion: Sesion) = sesionDao.update(sesion)
     suspend fun eliminarSesion(sesion: Sesion) = sesionDao.delete(sesion)
     fun obtenerSesionesPorUsuario(usuarioId: Int): LiveData<List<Sesion>> = sesionDao.allsesionsbyID(usuarioId)
+    fun obtenerUltimasSesiones(usuarioId: Int, limit: Int): LiveData<List<Sesion>> =
+        sesionDao.ultimasSesiones(usuarioId, limit)
     fun obtenerSesionPorId(id: Int): LiveData<Sesion> = sesionDao.sesionbyID(id)
 
     suspend fun insertarDetalle(detalle: DetalleSesion) = detalleSesionDao.insert(detalle)
