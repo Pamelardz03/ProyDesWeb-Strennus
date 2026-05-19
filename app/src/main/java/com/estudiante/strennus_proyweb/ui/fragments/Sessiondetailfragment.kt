@@ -50,6 +50,7 @@ val retrofit = retrofit2.Retrofit.Builder()
             db.sesionDao(),
             db.detalleDao(),
             db.rutinaDao(),
+            null,
             apiService
         )
 

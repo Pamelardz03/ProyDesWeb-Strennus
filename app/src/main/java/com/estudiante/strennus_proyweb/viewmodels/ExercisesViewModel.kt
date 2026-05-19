@@ -26,7 +26,7 @@ class ExercisesViewModel(private val repository: AppRepository) : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = repository.buscarEjercicios()
-                if (response.isSuccessful) {
+                if (response?.isSuccessful == true) {
                     val exercises = response.body()?.exercises ?: emptyList()
                     _exerciseList.postValue(exercises)
                 } else {

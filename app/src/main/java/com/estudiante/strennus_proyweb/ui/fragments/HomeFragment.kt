@@ -162,6 +162,7 @@ class HomeFragment : Fragment(), SensorEventListener {
             db.sesionDao(),
             db.detalleDao(),
             db.rutinaDao(),
+            null,
             apiService
         )
         val factory = AppViewModelFactory(repository)
