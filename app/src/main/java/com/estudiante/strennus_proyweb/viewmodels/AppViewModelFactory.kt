@@ -6,14 +6,18 @@ import com.estudiante.strennus_proyweb.repository.AppRepository
 
 class AppViewModelFactory(private val repository: AppRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return when {
-            modelClass.isAssignableFrom(HomeViewModel::class.java) ->
-                @Suppress("UNCHECKED_CAST")
-                HomeViewModel(repository) as T
-            modelClass.isAssignableFrom(SessionViewModel::class.java) ->
-                @Suppress("UNCHECKED_CAST")
-                SessionViewModel(repository) as T
-            else -> throw IllegalArgumentException("ViewModel desconocido: ${modelClass.name}")
+        if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
+            return HomeViewModel(repository) as T
         }
+        if (modelClass.isAssignableFrom(SessionViewModel::class.java)) {
+            return SessionViewModel(repository) as T
+        }
+        if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
+            return LoginViewModel(repository) as T
+        }
+        if (modelClass.isAssignableFrom(ExercisesViewModel::class.java)) {
+            return ExercisesViewModel(repository) as T
+        }
+        throw IllegalArgumentException("ViewModel Class Desconocida")
     }
 }

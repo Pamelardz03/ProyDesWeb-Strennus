@@ -1,6 +1,7 @@
 package com.estudiante.strennus_proyweb.viewmodels
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.estudiante.strennus_proyweb.entities.Sesion
@@ -10,18 +11,26 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(private val repository: AppRepository) : ViewModel() {
 
-    private lateinit var _sesiones: LiveData<List<Sesion>>
-    val sesiones get() = _sesiones
+    private val _sesiones = MutableLiveData<List<Sesion>>()
+    val sesiones: LiveData<List<Sesion>> get() = _sesiones
 
-    private lateinit var _usuario: LiveData<Usuario>
-    val usuario get() = _usuario
+    private val _usuario = MutableLiveData<Usuario>()
+    val usuario: LiveData<Usuario> get() = _usuario
 
     fun cargarSesiones(usuarioId: Int) {
-        _sesiones = repository.obtenerSesionesPorUsuario(usuarioId)
+        viewModelScope.launch {
+            repository.obtenerSesionesPorUsuario(usuarioId).observeForever { listaSesiones ->
+                _sesiones.postValue(listaSesiones)
+            }
+        }
     }
 
     fun cargarUsuario(usuarioId: Int) {
-        _usuario = repository.obtenerUsuarioPorId(usuarioId)
+        viewModelScope.launch {
+           repository.obtenerUsuarioPorId(usuarioId).observeForever { datosUsuario ->
+                _usuario.postValue(datosUsuario)
+            }
+        }
     }
 
     fun eliminarSesion(sesion: Sesion) {
