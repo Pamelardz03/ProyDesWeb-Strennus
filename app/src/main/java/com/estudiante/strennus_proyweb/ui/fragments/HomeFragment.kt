@@ -54,6 +54,10 @@ class HomeFragment : Fragment(), SensorEventListener {
     observeViewModel()
     setupStepSensor()
 
+        binding.btnNewSession.setOnClickListener {
+            CreateSessionDialog().show(parentFragmentManager, "CreateSessionDialog")
+        }
+
     parentFragmentManager.setFragmentResultListener(
         "session_created", viewLifecycleOwner
     ) { _, _ ->
