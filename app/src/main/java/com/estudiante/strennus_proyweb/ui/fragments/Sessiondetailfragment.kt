@@ -1,13 +1,14 @@
 package com.estudiante.strennus_proyweb.ui.fragments
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.estudiante.strennus_proyweb.R
@@ -56,9 +57,10 @@ class SessionDetailFragment : Fragment() {
         }
 
         binding.btnStartSession.setOnClickListener {
-            android.util.Log.d("DEBUG", "sesionId = $sesionId")
-            val intent = android.content.Intent(requireContext(),
-                com.estudiante.strennus_proyweb.ui.ActiveSessionActivity::class.java)
+            val intent = android.content.Intent(
+                requireContext(),
+                com.estudiante.strennus_proyweb.ui.ActiveSessionActivity::class.java
+            )
             intent.putExtra("sesion_id", sesionId)
             startActivity(intent)
         }
@@ -73,6 +75,26 @@ class SessionDetailFragment : Fragment() {
                 ).format(Date(sesion.fecha))
                 binding.tvSessionDuration.text = if (sesion.duracionMinutos != null)
                     "${sesion.duracionMinutos} min" else "—"
+
+                // Mostrar imagen si existe
+                if (!sesion.imagenPath.isNullOrEmpty()) {
+                    binding.cardSessionImage.visibility = View.VISIBLE
+                    binding.ivSessionImage.setImageURI(Uri.parse(sesion.imagenPath))
+
+                    // Click en imagen para verla completa
+                    binding.ivSessionImage.setOnClickListener {
+                        showFullScreenImage(Uri.parse(sesion.imagenPath))
+                    }
+                } else {
+                    binding.cardSessionImage.visibility = View.GONE
+                }
+
+                if (!sesion.notas.isNullOrEmpty()) {
+                    binding.cardNotas.visibility = View.VISIBLE
+                    binding.tvSessionNotes.text = sesion.notas
+                } else {
+                    binding.cardNotas.visibility = View.GONE
+                }
             }
         }
 
@@ -81,12 +103,22 @@ class SessionDetailFragment : Fragment() {
         }
     }
 
-    // Agrupa los DetalleSesion por nombre de ejercicio y los muestra como tarjetas
+    // Muestra la imagen a pantalla completa con un dialog
+    private fun showFullScreenImage(uri: Uri) {
+        val dialog = android.app.Dialog(requireContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        val imageView = ImageView(requireContext()).apply {
+            setImageURI(uri)
+            scaleType = ImageView.ScaleType.FIT_CENTER
+            setBackgroundColor(android.graphics.Color.BLACK)
+            setOnClickListener { dialog.dismiss() }
+        }
+        dialog.setContentView(imageView)
+        dialog.show()
+    }
+
     private fun renderEjerciciosAgrupados(detalles: List<DetalleSesion>) {
         binding.llEjercicios.removeAllViews()
         val inflater = LayoutInflater.from(requireContext())
-
-        // Agrupar por nombre de ejercicio
         val grupos = detalles.groupBy { it.nombreEjercicio }
 
         grupos.forEach { (nombreEjercicio, series) ->
@@ -98,8 +130,6 @@ class SessionDetailFragment : Fragment() {
             val llSeries = cardView.findViewById<LinearLayout>(R.id.llSeriesDetalle)
             val btnToggle = cardView.findViewById<ImageButton>(R.id.btnToggleDetalle)
             var isExpanded = false
-
-            // Por defecto colapsado
             llSeries.visibility = View.GONE
 
             btnToggle.setOnClickListener {
@@ -107,7 +137,6 @@ class SessionDetailFragment : Fragment() {
                 llSeries.visibility = if (isExpanded) View.VISIBLE else View.GONE
             }
 
-            // Agregar filas de series
             series.forEachIndexed { index, detalle ->
                 val rowView = inflater.inflate(R.layout.item_serie_row_readonly, llSeries, false)
                 rowView.findViewById<TextView>(R.id.tvSerieNumber).text = "${index + 1}"

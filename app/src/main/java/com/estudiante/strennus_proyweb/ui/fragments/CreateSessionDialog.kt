@@ -1,6 +1,9 @@
 package com.estudiante.strennus_proyweb.ui.fragments
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -54,11 +58,41 @@ class CreateSessionDialog : DialogFragment() {
     private var isLoading = false
     private var isSearchMode = true
 
-    // Leer el usuario logueado de SharedPreferences
+    // URI de la imagen seleccionada
+    private var selectedImageUri: Uri? = null
+
     private val usuarioId by lazy {
         requireContext()
             .getSharedPreferences("strenuus_prefs", Context.MODE_PRIVATE)
             .getInt("usuario_id", -1)
+    }
+
+    // Launcher para abrir galería
+    private val galleryLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            selectedImageUri = it
+            binding.ivSessionImage.setImageURI(it)
+            binding.cardImagePreview.visibility = View.VISIBLE
+        }
+    }
+
+    // Launcher para abrir cámara
+    private val cameraLauncher = registerForActivityResult(
+        ActivityResultContracts.TakePicturePreview()
+    ) { bitmap ->
+        bitmap?.let {
+            binding.ivSessionImage.setImageBitmap(it)
+            binding.cardImagePreview.visibility = View.VISIBLE
+            // Convertir bitmap a URI para guardarlo
+            val bytes = java.io.ByteArrayOutputStream()
+            it.compress(android.graphics.Bitmap.CompressFormat.JPEG, 100, bytes)
+            val path = android.provider.MediaStore.Images.Media.insertImage(
+                requireContext().contentResolver, it, "Sesión", null
+            )
+            selectedImageUri = Uri.parse(path)
+        }
     }
 
     private val retrofit: Retrofit by lazy {
@@ -146,6 +180,7 @@ class CreateSessionDialog : DialogFragment() {
 
     private fun setupListeners() {
         binding.btnClose.setOnClickListener { dismiss() }
+
         binding.btnCreateExercise.setOnClickListener {
             val dialog = CreateExerciseDialog { ejercicio ->
                 selectedExercises.add(ejercicio)
@@ -155,7 +190,20 @@ class CreateSessionDialog : DialogFragment() {
             }
             dialog.show(parentFragmentManager, "CreateExerciseDialog")
         }
+
         binding.btnSaveSession.setOnClickListener { saveSession() }
+
+        // Botón de imagen — muestra opciones cámara o galería
+        binding.btnAddImage.setOnClickListener {
+            showImageOptions()
+        }
+
+        // Botón eliminar imagen
+        binding.btnRemoveImage.setOnClickListener {
+            selectedImageUri = null
+            binding.ivSessionImage.setImageDrawable(null)
+            binding.cardImagePreview.visibility = View.GONE
+        }
 
         binding.etSearchExercise.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -186,6 +234,19 @@ class CreateSessionDialog : DialogFragment() {
         }
     }
 
+    // Muestra un dialog para elegir entre cámara y galería
+    private fun showImageOptions() {
+        val options = arrayOf("Tomar foto", "Elegir de galería")
+        android.app.AlertDialog.Builder(requireContext())
+            .setTitle("Agregar imagen")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> cameraLauncher.launch(null)
+                    1 -> galleryLauncher.launch("image/*")
+                }
+            }
+            .show()
+    }
 
     private fun showSearchMode() {
         isSearchMode = true
@@ -242,7 +303,9 @@ class CreateSessionDialog : DialogFragment() {
             usuarioId = usuarioId,
             nombre = nombre,
             fecha = ahora,
-            horaInicio = ahora
+            horaInicio = ahora,
+            imagenPath = selectedImageUri?.toString(),
+            notas = binding.etSessionNotes.text.toString().trim().ifEmpty { null }
         )
 
         sesionViewModel.crearSesion(sesion) { sesionId ->
@@ -253,8 +316,7 @@ class CreateSessionDialog : DialogFragment() {
                         nombreEjercicio = ejercicio.nombre,
                         series = index + 1,
                         repeticiones = serie.reps,
-                        peso = serie.peso,
-                        notas = null
+                        peso = serie.peso
                     )
                     sesionViewModel.agregarEjercicio(detalle)
                 }
@@ -265,6 +327,7 @@ class CreateSessionDialog : DialogFragment() {
                     "Sesión \"$nombre\" guardada",
                     Toast.LENGTH_SHORT
                 ).show()
+                parentFragmentManager.setFragmentResult("session_created", Bundle())
                 dismiss()
             }
         }

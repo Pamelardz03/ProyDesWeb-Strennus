@@ -24,4 +24,7 @@ interface SesionDao {
 
     @Query("SELECT * FROM sesiones WHERE usuarioId = :usuarioId")
     fun sesionbyID(usuarioId : Int) : LiveData<Sesion>
+
+    @Query("SELECT * FROM sesiones WHERE usuarioId = :usuarioId ORDER BY fecha DESC LIMIT :limit")
+    fun ultimasSesiones(usuarioId: Int, limit: Int): LiveData<List<Sesion>>
 }
