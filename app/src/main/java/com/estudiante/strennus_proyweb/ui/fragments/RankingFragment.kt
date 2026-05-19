@@ -9,6 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.estudiante.strennus_proyweb.databinding.FragmentRankingBinding
 import com.estudiante.strennus_proyweb.databinding.ItemRankingBinding
 import com.estudiante.strennus_proyweb.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.estudiante.strennus_proyweb.data.AppDataBase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RankingFragment : Fragment() {
 
@@ -26,20 +32,20 @@ class RankingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val usuarios = listOf(
-            RankingUser(1, "Alex Johnson", 2840),
-            RankingUser(2, "Maria Garcia", 2735),
-            RankingUser(3, "Chris Lee", 2680),
-            RankingUser(4, "Sarah Smith", 2590),
-            RankingUser(5, "Mike Wilson", 2510),
-            RankingUser(6, "Persona 6", 2310),
-            RankingUser(7, "Persona 7", 2200),
-            RankingUser(8, "Persona 8", 2180),
-            RankingUser(9, "Persona 9", 1890),
-            RankingUser(10, "Persona 10", 1610)
-        )
+        binding.ListaRanking.layoutManager = LinearLayoutManager(requireContext())
 
-        binding.ListaRanking.adapter = RankingAdapter(usuarios)
+        CoroutineScope(Dispatchers.IO).launch {
+            val db = AppDataBase.getInstance(requireContext())
+            val usuarios = db.usuarioDao().getAllUsuarios()
+                .sortedByDescending { it.puntos }
+
+            withContext(Dispatchers.Main) {
+                val items = usuarios.mapIndexed { index, u ->
+                    RankingUser(index + 1, u.name, u.puntos)
+                }
+                binding.ListaRanking.adapter = RankingAdapter(items)
+            }
+        }
     }
 
     override fun onDestroyView() {

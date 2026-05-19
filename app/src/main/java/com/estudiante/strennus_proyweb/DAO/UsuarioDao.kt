@@ -28,4 +28,10 @@ interface UsuarioDao {
 
     @Query("SELECT * FROM usuarios WHERE username = :username AND password = :password LIMIT 1")
     suspend fun login(username: String, password: String): Usuario?
+
+    @Query("SELECT * FROM usuarios WHERE id = :id LIMIT 1")
+    suspend fun getByIdSync(id: Int): Usuario?
+
+    @Query("SELECT * FROM usuarios")
+    suspend fun getAllUsuarios(): List<Usuario>
 }

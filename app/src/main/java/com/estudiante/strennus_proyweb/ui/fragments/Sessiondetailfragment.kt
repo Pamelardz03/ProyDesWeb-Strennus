@@ -135,9 +135,10 @@ val retrofit = retrofit2.Retrofit.Builder()
 
         grupos.forEach { (nombreEjercicio, series) ->
             val cardView = inflater.inflate(R.layout.item_ejercicio_detalle, binding.llEjercicios, false)
+            val detalle = series.first()
 
             cardView.findViewById<TextView>(R.id.tvEjercicioNombre).text = nombreEjercicio
-            cardView.findViewById<TextView>(R.id.tvSeriesCount).text = "${series.size} series"
+            cardView.findViewById<TextView>(R.id.tvSeriesCount).text = "${detalle.series} series"
 
             val llSeries = cardView.findViewById<LinearLayout>(R.id.llSeriesDetalle)
             val btnToggle = cardView.findViewById<ImageButton>(R.id.btnToggleDetalle)
@@ -149,7 +150,7 @@ val retrofit = retrofit2.Retrofit.Builder()
                 llSeries.visibility = if (isExpanded) View.VISIBLE else View.GONE
             }
 
-            series.forEachIndexed { index, detalle ->
+            repeat(detalle.series) { index ->
                 val rowView = inflater.inflate(R.layout.item_serie_row_readonly, llSeries, false)
                 rowView.findViewById<TextView>(R.id.tvSerieNumber).text = "${index + 1}"
                 rowView.findViewById<TextView>(R.id.tvReps).text = "${detalle.repeticiones} reps"

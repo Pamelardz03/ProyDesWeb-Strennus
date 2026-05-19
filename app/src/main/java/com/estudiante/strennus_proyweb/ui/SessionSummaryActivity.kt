@@ -4,6 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.estudiante.strennus_proyweb.databinding.ActivitySessionSummaryBinding
+import com.estudiante.strennus_proyweb.data.AppDataBase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SessionSummaryActivity : AppCompatActivity() {
 
@@ -17,11 +21,27 @@ class SessionSummaryActivity : AppCompatActivity() {
         binding = ActivitySessionSummaryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val ejerciciosCompletados = intent.getIntExtra("ejercicios_completados", 0)
+        val duracionMin = intent.getIntExtra("duracion_minutos", 0)
         val puntos = ejerciciosCompletados * 250
 
         binding.tvExercisesCompleted.text = ejerciciosCompletados.toString()
         binding.tvPointsGained.text = puntos.toString()
-        binding.tvDuration.text = "En progreso"
+        binding.tvDuration.text = if (duracionMin < 1) "< 1 min" else "$duracionMin min"
+
+        val prefs = getSharedPreferences("strenuus_prefs", MODE_PRIVATE)
+        val usuarioId = prefs.getInt("usuario_id", -1)
+
+        if (usuarioId != -1) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val db = AppDataBase.getInstance(this@SessionSummaryActivity)
+                val usuario = db.usuarioDao().getByIdSync(usuarioId)
+                usuario?.let {
+                    val actualizado = it.copy(puntos = it.puntos + puntos)
+                    db.usuarioDao().updateUser(actualizado)
+                }
+            }
+        }
 
         binding.btnClose.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
