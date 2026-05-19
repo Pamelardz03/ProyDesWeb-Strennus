@@ -25,6 +25,7 @@ class HomeViewModel(private val repository: AppRepository) : ViewModel() {
         }
     }
 
+
     fun cargarUsuario(usuarioId: Int) {
         viewModelScope.launch {
            repository.obtenerUsuarioPorId(usuarioId).observeForever { datosUsuario ->

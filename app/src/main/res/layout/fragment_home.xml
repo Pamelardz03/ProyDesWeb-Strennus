@@ -13,6 +13,7 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- Sesiones Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,7 +30,6 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <!-- Header -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -98,7 +98,6 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <!-- Header -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -115,9 +114,10 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvStepSummary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="11,000/16,000"
+                        android:text="0/10,000"
                         android:textColor="@color/gray_light"
                         android:textSize="12sp" />
 
@@ -130,17 +130,19 @@
                     android:layout_marginBottom="12dp">
 
                     <TextView
+                        android:id="@+id/tvStepCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="11,000"
+                        android:text="0"
                         android:textColor="@color/white"
                         android:textSize="30sp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvStepGoal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="/16,000"
+                        android:text="/10,000"
                         android:textColor="@color/gray_light"
                         android:textSize="14sp"
                         android:layout_gravity="bottom"
@@ -155,7 +157,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="8dp"
                     android:max="100"
-                    android:progress="68"
+                    android:progress="0"
                     android:progressTint="@color/red_primary"
                     android:progressBackgroundTint="#333333" />
 
@@ -163,6 +165,7 @@
 
         </androidx.cardview.widget.CardView>
 
+        <!-- Actividad Diaria Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -178,7 +181,6 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <!-- Header -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -209,7 +211,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <!-- Stats -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -224,17 +225,19 @@
                             android:layout_marginBottom="12dp">
 
                             <TextView
+                                android:id="@+id/tvStepCountActivity"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="11,000"
+                                android:text="0"
                                 android:textColor="@color/white"
                                 android:textSize="24sp"
                                 android:textStyle="bold" />
 
                             <TextView
+                                android:id="@+id/tvStepGoalActivity"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="/16,000 pasos"
+                                android:text="/10,000 pasos"
                                 android:textColor="@color/gray_light"
                                 android:textSize="12sp" />
 
@@ -248,9 +251,10 @@
                             android:layout_marginBottom="12dp">
 
                             <TextView
+                                android:id="@+id/tvCalories"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="440"
+                                android:text="0"
                                 android:textColor="@color/white"
                                 android:textSize="24sp"
                                 android:textStyle="bold" />
@@ -258,7 +262,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="/280 cal"
+                                android:text="cal quemadas"
                                 android:textColor="@color/gray_light"
                                 android:textSize="12sp" />
 
@@ -271,9 +275,10 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tvDistance"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="1.8"
+                                android:text="0.0"
                                 android:textColor="@color/white"
                                 android:textSize="24sp"
                                 android:textStyle="bold" />
@@ -281,7 +286,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="/2.11 km"
+                                android:text="km recorridos"
                                 android:textColor="@color/gray_light"
                                 android:textSize="12sp" />
 
@@ -300,15 +305,16 @@
                             android:layout_height="match_parent"
                             android:indeterminate="false"
                             android:max="100"
-                            android:progress="68"
+                            android:progress="0"
                             android:progressTint="@color/red_primary"
                             android:progressBackgroundTint="#333333" />
 
                         <TextView
+                            android:id="@+id/tvProgressPercent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="68%"
+                            android:text="0%"
                             android:textColor="@color/white"
                             android:textSize="20sp"
                             android:textStyle="bold" />
