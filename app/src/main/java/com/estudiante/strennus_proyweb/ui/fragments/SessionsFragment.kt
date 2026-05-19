@@ -61,7 +61,7 @@ class SessionsFragment : Fragment() {
             db.usuarioDao(),
             db.sesionDao(),
             db.detalleDao(),
-            db.rutinaDao(),
+            db.rutinaDao(),null,
             apiService
         )
         val factory = AppViewModelFactory(repository)

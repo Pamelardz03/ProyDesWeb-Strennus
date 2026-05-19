@@ -76,6 +76,7 @@ class ExercisesFragment : Fragment(), SearchView.OnQueryTextListener {
             db.sesionDao(),
             db.detalleDao(),
             db.rutinaDao(),
+            null,
             apiService
         )
         val factory = AppViewModelFactory(repository)
