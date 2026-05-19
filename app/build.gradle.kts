@@ -57,6 +57,14 @@ dependencies {
     
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
+
+    // Unit Testing
+    testImplementation(libs.junit)
+    testImplementation(libs.truth)
+
+    // Instrumented / UI Testing
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
     
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
