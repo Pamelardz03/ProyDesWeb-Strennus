@@ -130,11 +130,12 @@
             <ProgressBar
                 android:id="@+id/circularProgress"
                 style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="220dp"
+                android:layout_height="220dp"
                 android:indeterminate="false"
-                android:progress="50"
-                android:progressDrawable="@drawable/bg_circle_timer_background"
+                android:max="100"
+                android:progress="100"
+                android:progressDrawable="@drawable/circular_time_progress"
                 android:layout_gravity="center"/>
 
             <!-- Timer Text -->
@@ -186,6 +187,7 @@
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 app:cornerRadius="32dp"
+                android:rotation="180"
                 app:strokeColor="@color/gray_darker"
                 app:strokeWidth="1dp"
                 android:backgroundTint="@color/gray_dark"

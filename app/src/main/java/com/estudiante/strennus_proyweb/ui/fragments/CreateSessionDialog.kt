@@ -327,24 +327,19 @@ class CreateSessionDialog : DialogFragment() {
 
         sesionViewModel.crearSesion(sesion) { sesionId ->
             selectedExercises.forEach { ejercicio ->
-                ejercicio.series.forEachIndexed { index, serie ->
-                    val detalle = DetalleSesion(
-                        sesionId = sesionId.toInt(),
-                        nombreEjercicio = ejercicio.nombre,
-                        series = index + 1,
-                        repeticiones = serie.reps,
-                        peso = serie.peso
-                    )
-                    sesionViewModel.agregarEjercicio(detalle)
-                }
+                val totalSeries = ejercicio.series.size
+                val primerasSerie = ejercicio.series.firstOrNull()
+                val detalle = DetalleSesion(
+                    sesionId = sesionId.toInt(),
+                    nombreEjercicio = ejercicio.nombre,
+                    series = totalSeries,
+                    repeticiones = primerasSerie?.reps ?: 12,
+                    peso = primerasSerie?.peso
+                )
+                sesionViewModel.agregarEjercicio(detalle)
             }
-            // requireActivity() se asegura de ejecutarse en el Main Thread de forma nativa e integrada en Fragments
             requireActivity().runOnUiThread {
-                Toast.makeText(
-                    requireContext(),
-                    "Sesión \"$nombre\" guardada",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(requireContext(), "Sesión \"$nombre\" guardada", Toast.LENGTH_SHORT).show()
                 parentFragmentManager.setFragmentResult("session_created", Bundle())
                 dismiss()
             }

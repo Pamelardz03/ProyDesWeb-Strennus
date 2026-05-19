@@ -11,5 +11,6 @@ data class Usuario(
     val username: String,
     val correo: String,
     val password: String,
-    val fechaRegistro: Long
+    val fechaRegistro: Long,
+    val puntos: Int = 0
 )
