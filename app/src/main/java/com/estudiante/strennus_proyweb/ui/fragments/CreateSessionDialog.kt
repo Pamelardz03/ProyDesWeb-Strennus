@@ -47,6 +47,8 @@ class CreateSessionDialog : DialogFragment() {
 
     private lateinit var availableAdapter: ExerciseAdapter
     private lateinit var selectedAdapter: SelectedExerciseAdapter
+
+    // Nombre de la propiedad unificado para evitar confusiones
     private lateinit var sesionViewModel: SessionViewModel
 
     private val exerciseList = mutableListOf<Exercise>()
@@ -133,10 +135,29 @@ class CreateSessionDialog : DialogFragment() {
 
     private fun setupViewModel() {
         val db = AppDataBase.getInstance(requireContext())
+
+        val logging = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BASIC
+        }
+        val client = OkHttpClient.Builder().addInterceptor(logging).build()
+        val localRetrofit = Retrofit.Builder()
+            .baseUrl("https://wger.de/")
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val apiService = localRetrofit.create(APIService::class.java)
+
         val repository = AppRepository(
-            db.usuarioDao(), db.sesionDao(), db.detalleDao(), db.rutinaDao()
+            db.usuarioDao(),
+            db.sesionDao(),
+            db.detalleDao(),
+            db.rutinaDao(),
+            db.ejercicioPersonalizadoDao(),
+            apiService
         )
         val factory = AppViewModelFactory(repository)
+
         sesionViewModel = ViewModelProvider(this, factory)[SessionViewModel::class.java]
     }
 
@@ -353,6 +374,7 @@ class CreateSessionDialog : DialogFragment() {
                     sesionViewModel.agregarEjercicio(detalle)
                 }
             }
+            // requireActivity() se asegura de ejecutarse en el Main Thread de forma nativa e integrada en Fragments
             requireActivity().runOnUiThread {
                 Toast.makeText(requireContext(), "Sesión \"$nombre\" guardada", Toast.LENGTH_SHORT).show()
                 parentFragmentManager.setFragmentResult("session_created", Bundle())

@@ -50,11 +50,19 @@ class SessionsFragment : Fragment() {
 
     private fun setupViewModel() {
         val db = AppDataBase.getInstance(requireContext())
+
+        val retrofit = retrofit2.Retrofit.Builder()
+            .baseUrl("https://wger.de/")
+            .addConverterFactory(retrofit2.converter.gson.GsonConverterFactory.create())
+            .build()
+        val apiService = retrofit.create(com.estudiante.strennus_proyweb.data.APIService::class.java)
+
         val repository = AppRepository(
             db.usuarioDao(),
             db.sesionDao(),
             db.detalleDao(),
-            db.rutinaDao()
+            db.rutinaDao(),
+            apiService
         )
         val factory = AppViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
