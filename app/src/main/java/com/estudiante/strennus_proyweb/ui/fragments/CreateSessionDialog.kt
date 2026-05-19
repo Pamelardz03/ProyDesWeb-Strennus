@@ -1,8 +1,6 @@
 package com.estudiante.strennus_proyweb.ui.fragments
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -20,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.estudiante.strennus_proyweb.data.APIService
 import com.estudiante.strennus_proyweb.data.AppDataBase
 import com.estudiante.strennus_proyweb.data.Exercise
+import com.estudiante.strennus_proyweb.data.Translation
 import com.estudiante.strennus_proyweb.databinding.DialogCreateSessionBinding
 import com.estudiante.strennus_proyweb.entities.DetalleSesion
 import com.estudiante.strennus_proyweb.entities.Sesion
@@ -52,13 +51,14 @@ class CreateSessionDialog : DialogFragment() {
 
     private val exerciseList = mutableListOf<Exercise>()
     private val allExercises = mutableListOf<Exercise>()
+    private val ejerciciosUsuario = mutableListOf<Exercise>()
+    private val ejerciciosAPI = mutableListOf<Exercise>()
     private val selectedExercises = mutableListOf<EjercicioConSeries>()
 
     private var currentOffset = 0
     private var isLoading = false
     private var isSearchMode = true
-
-    // URI de la imagen seleccionada
+    private var mostrarSoloMios = false
     private var selectedImageUri: Uri? = null
 
     private val usuarioId by lazy {
@@ -67,7 +67,6 @@ class CreateSessionDialog : DialogFragment() {
             .getInt("usuario_id", -1)
     }
 
-    // Launcher para abrir galería
     private val galleryLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -78,16 +77,12 @@ class CreateSessionDialog : DialogFragment() {
         }
     }
 
-    // Launcher para abrir cámara
     private val cameraLauncher = registerForActivityResult(
         ActivityResultContracts.TakePicturePreview()
     ) { bitmap ->
         bitmap?.let {
             binding.ivSessionImage.setImageBitmap(it)
             binding.cardImagePreview.visibility = View.VISIBLE
-            // Convertir bitmap a URI para guardarlo
-            val bytes = java.io.ByteArrayOutputStream()
-            it.compress(android.graphics.Bitmap.CompressFormat.JPEG, 100, bytes)
             val path = android.provider.MediaStore.Images.Media.insertImage(
                 requireContext().contentResolver, it, "Sesión", null
             )
@@ -139,10 +134,7 @@ class CreateSessionDialog : DialogFragment() {
     private fun setupViewModel() {
         val db = AppDataBase.getInstance(requireContext())
         val repository = AppRepository(
-            db.usuarioDao(),
-            db.sesionDao(),
-            db.detalleDao(),
-            db.rutinaDao()
+            db.usuarioDao(), db.sesionDao(), db.detalleDao(), db.rutinaDao()
         )
         val factory = AppViewModelFactory(repository)
         sesionViewModel = ViewModelProvider(this, factory)[SessionViewModel::class.java]
@@ -160,7 +152,7 @@ class CreateSessionDialog : DialogFragment() {
                 super.onScrolled(recyclerView, dx, dy)
                 val lm = recyclerView.layoutManager as LinearLayoutManager
                 if (lm.findLastVisibleItemPosition() >= lm.itemCount - 3 && !isLoading) {
-                    loadMoreExercises()
+                    if (!mostrarSoloMios) loadMoreExercises()
                 }
             }
         })
@@ -183,6 +175,15 @@ class CreateSessionDialog : DialogFragment() {
 
         binding.btnCreateExercise.setOnClickListener {
             val dialog = CreateExerciseDialog { ejercicio ->
+                val nuevoExercise = Exercise(
+                    id = -1,
+                    translations = listOf(Translation(language = 2, name = ejercicio.nombre, description = ""))
+                )
+                ejerciciosUsuario.add(0, nuevoExercise)
+                allExercises.add(0, nuevoExercise)
+                exerciseList.add(0, nuevoExercise)
+                availableAdapter.notifyDataSetChanged()
+
                 selectedExercises.add(ejercicio)
                 selectedAdapter.notifyDataSetChanged()
                 binding.selectedExercisesSection.visibility = View.VISIBLE
@@ -192,17 +193,43 @@ class CreateSessionDialog : DialogFragment() {
         }
 
         binding.btnSaveSession.setOnClickListener { saveSession() }
-
-        // Botón de imagen — muestra opciones cámara o galería
-        binding.btnAddImage.setOnClickListener {
-            showImageOptions()
-        }
-
-        // Botón eliminar imagen
+        binding.btnAddImage.setOnClickListener { showImageOptions() }
         binding.btnRemoveImage.setOnClickListener {
             selectedImageUri = null
             binding.ivSessionImage.setImageDrawable(null)
             binding.cardImagePreview.visibility = View.GONE
+        }
+
+        // Filtro Todos
+        binding.btnFiltroTodos.setOnClickListener {
+            mostrarSoloMios = false
+            setFiltroActivo(isTodos = true)
+            val query = binding.etSearchExercise.text.toString().trim()
+            exerciseList.clear()
+            if (query.isEmpty()) {
+                exerciseList.addAll(allExercises)
+            } else {
+                exerciseList.addAll(allExercises.filter {
+                    it.name.lowercase().contains(query.lowercase())
+                })
+            }
+            availableAdapter.notifyDataSetChanged()
+        }
+
+        // Filtro Mis ejercicios
+        binding.btnFiltroMios.setOnClickListener {
+            mostrarSoloMios = true
+            setFiltroActivo(isTodos = false)
+            val query = binding.etSearchExercise.text.toString().trim()
+            exerciseList.clear()
+            if (query.isEmpty()) {
+                exerciseList.addAll(ejerciciosUsuario)
+            } else {
+                exerciseList.addAll(ejerciciosUsuario.filter {
+                    it.name.lowercase().contains(query.lowercase())
+                })
+            }
+            availableAdapter.notifyDataSetChanged()
         }
 
         binding.etSearchExercise.addTextChangedListener(object : TextWatcher {
@@ -214,15 +241,14 @@ class CreateSessionDialog : DialogFragment() {
                 searchJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(300)
                     if (!isSearchMode) showSearchMode()
+                    val source = if (mostrarSoloMios) ejerciciosUsuario else allExercises
                     exerciseList.clear()
                     if (query.isEmpty()) {
-                        exerciseList.addAll(allExercises)
+                        exerciseList.addAll(source)
                     } else {
-                        exerciseList.addAll(
-                            allExercises.filter {
-                                it.name.lowercase().contains(query.lowercase())
-                            }
-                        )
+                        exerciseList.addAll(source.filter {
+                            it.name.lowercase().contains(query.lowercase())
+                        })
                     }
                     availableAdapter.notifyDataSetChanged()
                 }
@@ -234,7 +260,14 @@ class CreateSessionDialog : DialogFragment() {
         }
     }
 
-    // Muestra un dialog para elegir entre cámara y galería
+    // Cambia el color del botón activo
+    private fun setFiltroActivo(isTodos: Boolean) {
+        val rojo = android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#E60000"))
+        val gris = android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#1A1A1A"))
+        binding.btnFiltroTodos.backgroundTintList = if (isTodos) rojo else gris
+        binding.btnFiltroMios.backgroundTintList = if (isTodos) gris else rojo
+    }
+
     private fun showImageOptions() {
         val options = arrayOf("Tomar foto", "Elegir de galería")
         android.app.AlertDialog.Builder(requireContext())
@@ -244,8 +277,7 @@ class CreateSessionDialog : DialogFragment() {
                     0 -> cameraLauncher.launch(null)
                     1 -> galleryLauncher.launch("image/*")
                 }
-            }
-            .show()
+            }.show()
     }
 
     private fun showSearchMode() {
@@ -322,11 +354,7 @@ class CreateSessionDialog : DialogFragment() {
                 }
             }
             requireActivity().runOnUiThread {
-                Toast.makeText(
-                    requireContext(),
-                    "Sesión \"$nombre\" guardada",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(requireContext(), "Sesión \"$nombre\" guardada", Toast.LENGTH_SHORT).show()
                 parentFragmentManager.setFragmentResult("session_created", Bundle())
                 dismiss()
             }
@@ -336,16 +364,43 @@ class CreateSessionDialog : DialogFragment() {
     private fun loadExercises() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                // 1. Cargar ejercicios del usuario
+                val db = AppDataBase.getInstance(requireContext())
+                val repository = AppRepository(
+                    db.usuarioDao(), db.sesionDao(), db.detalleDao(),
+                    db.rutinaDao(), db.ejercicioPersonalizadoDao()
+                )
+                val personalizados = repository.obtenerEjerciciosPersonalizados(usuarioId)
+                val listaUsuario = personalizados.map { ep ->
+                    Exercise(
+                        id = -ep.id,
+                        translations = listOf(Translation(
+                            language = 2,
+                            name = if (!ep.categoria.isNullOrEmpty()) "${ep.nombre} (${ep.categoria})" else ep.nombre,
+                            description = ep.descripcion ?: ""
+                        ))
+                    )
+                }
+
+                // 2. Cargar ejercicios de la API
                 val call = retrofit.create(APIService::class.java).getExercises()
+
                 withContext(Dispatchers.Main) {
+                    ejerciciosUsuario.clear()
+                    ejerciciosUsuario.addAll(listaUsuario)
+
+                    ejerciciosAPI.clear()
                     if (call.isSuccessful) {
-                        val exercises = call.body()?.exercises ?: emptyList()
-                        exerciseList.clear()
-                        exerciseList.addAll(exercises)
-                        allExercises.clear()
-                        allExercises.addAll(exercises)
-                        availableAdapter.notifyDataSetChanged()
+                        ejerciciosAPI.addAll(call.body()?.exercises ?: emptyList())
                     }
+
+                    allExercises.clear()
+                    allExercises.addAll(ejerciciosUsuario)
+                    allExercises.addAll(ejerciciosAPI)
+
+                    exerciseList.clear()
+                    exerciseList.addAll(allExercises)
+                    availableAdapter.notifyDataSetChanged()
                 }
             } catch (e: Exception) {
                 Log.e("CreateSessionDialog", "Error: ${e.message}")
@@ -363,9 +418,12 @@ class CreateSessionDialog : DialogFragment() {
                 withContext(Dispatchers.Main) {
                     if (call.isSuccessful) {
                         val exercises = call.body()?.exercises ?: emptyList()
-                        exerciseList.addAll(exercises)
+                        ejerciciosAPI.addAll(exercises)
                         allExercises.addAll(exercises)
-                        availableAdapter.notifyDataSetChanged()
+                        if (!mostrarSoloMios) {
+                            exerciseList.addAll(exercises)
+                            availableAdapter.notifyDataSetChanged()
+                        }
                     }
                     isLoading = false
                 }

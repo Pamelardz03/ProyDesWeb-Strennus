@@ -2,10 +2,12 @@ package com.estudiante.strennus_proyweb.repository
 
 import androidx.lifecycle.LiveData
 import com.estudiante.strennus_proyweb.DAO.DetalleSesionDao
+import com.estudiante.strennus_proyweb.DAO.EjercicioPersonalizadoDao
 import com.estudiante.strennus_proyweb.DAO.RutinaDao
 import com.estudiante.strennus_proyweb.DAO.SesionDao
 import com.estudiante.strennus_proyweb.DAO.UsuarioDao
 import com.estudiante.strennus_proyweb.entities.DetalleSesion
+import com.estudiante.strennus_proyweb.entities.EjercicioPersonalizado
 import com.estudiante.strennus_proyweb.entities.Rutina
 import com.estudiante.strennus_proyweb.entities.Sesion
 import com.estudiante.strennus_proyweb.entities.Usuario
@@ -14,7 +16,9 @@ class AppRepository(
     private val usuarioDao: UsuarioDao,
     private val sesionDao: SesionDao,
     private val detalleSesionDao: DetalleSesionDao,
-    private val rutinaDao: RutinaDao) {
+    private val rutinaDao: RutinaDao,
+    private val ejercicioPersonalizadoDao: EjercicioPersonalizadoDao? = null
+) {
 
     suspend fun insertarUsuario(usuario: Usuario) = usuarioDao.insert(usuario)
     suspend fun actualizarUsuario(usuario: Usuario) = usuarioDao.updateUser(usuario)
@@ -40,4 +44,8 @@ class AppRepository(
     suspend fun eliminarRutina(rutina: Rutina) = rutinaDao.eliminar(rutina)
     fun obtenerRutinasPorUsuario(usuarioId: Int): LiveData<List<Rutina>> = rutinaDao.obtenerPorUsuario(usuarioId)
     fun obtenerRutinaPorId(id: Int): LiveData<Rutina> = rutinaDao.obtenerPorId(id)
+
+    suspend fun insertarEjercicioPersonalizado(ejercicio: EjercicioPersonalizado) = ejercicioPersonalizadoDao?.insertar(ejercicio)
+    suspend fun obtenerEjerciciosPersonalizados(usuarioId: Int): List<EjercicioPersonalizado> = ejercicioPersonalizadoDao?.obtenerTodos(usuarioId) ?: emptyList()
+    fun obtenerEjerciciosPersonalizadosLive(usuarioId: Int): LiveData<List<EjercicioPersonalizado>>? = ejercicioPersonalizadoDao?.obtenerPorUsuario(usuarioId)
 }
