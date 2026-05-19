@@ -9,12 +9,28 @@ import com.estudiante.strennus_proyweb.entities.DetalleSesion
 import com.estudiante.strennus_proyweb.entities.Rutina
 import com.estudiante.strennus_proyweb.entities.Sesion
 import com.estudiante.strennus_proyweb.entities.Usuario
+import com.estudiante.strennus_proyweb.data.APIService
+import com.estudiante.strennus_proyweb.data.ExerciseResponse
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import retrofit2.Response
 
 class AppRepository(
     private val usuarioDao: UsuarioDao,
     private val sesionDao: SesionDao,
     private val detalleSesionDao: DetalleSesionDao,
-    private val rutinaDao: RutinaDao) {
+    private val rutinaDao: RutinaDao,
+    private val apiService: APIService) {
+
+    suspend fun buscarEjercicios(offset: Int = 0): Response<ExerciseResponse> {
+        return apiService.getExercises(offset = offset)
+    }
+
+    suspend fun verificarUsuario(usuario: String, contrasenia: String): Usuario? {
+        return withContext(Dispatchers.IO) {
+            usuarioDao.login(usuario, contrasenia)
+        }
+    }
 
     suspend fun insertarUsuario(usuario: Usuario) = usuarioDao.insert(usuario)
     suspend fun actualizarUsuario(usuario: Usuario) = usuarioDao.updateUser(usuario)

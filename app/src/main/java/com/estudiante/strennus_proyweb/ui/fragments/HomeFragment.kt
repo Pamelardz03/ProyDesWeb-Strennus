@@ -47,31 +47,31 @@ class HomeFragment : Fragment(), SensorEventListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    super.onViewCreated(view, savedInstanceState)
 
-        setupViewModel()
-        setupRecyclerView()
-        observeViewModel()
-        setupStepSensor()
+    setupRecyclerView()
+    setupViewModel()
+    observeViewModel()
+    setupStepSensor()
 
-        parentFragmentManager.setFragmentResultListener(
-            "session_created", viewLifecycleOwner
-        ) { _, _ ->
-            viewModel.cargarSesiones(usuarioId)
-        }
-
-        binding.btnNewSession.setOnClickListener {
-            val dialog = CreateSessionDialog()
-            dialog.show(parentFragmentManager, "CreateSessionDialog")
-        }
-
-        binding.tvViewMoreSessions.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(com.estudiante.strennus_proyweb.R.id.viewPager, SessionsFragment())
-                .addToBackStack(null)
-                .commit()
-        }
+    parentFragmentManager.setFragmentResultListener(
+        "session_created", viewLifecycleOwner
+    ) { _, _ ->
+        viewModel.cargarSesiones(usuarioId)
     }
+
+    if (usuarioId != -1) {
+        viewModel.cargarUsuario(usuarioId)
+        viewModel.cargarSesiones(usuarioId)
+    }
+
+    binding.tvViewMoreSessions.setOnClickListener {
+        parentFragmentManager.beginTransaction()
+            .replace(com.estudiante.strennus_proyweb.R.id.viewPager, SessionsFragment())
+            .addToBackStack(null)
+            .commit()
+    }
+}
 
     override fun onResume() {
         super.onResume()
@@ -146,15 +146,22 @@ class HomeFragment : Fragment(), SensorEventListener {
     // ─── ViewModel ───────────────────────────────────────────────────────────
     private fun setupViewModel() {
         val db = AppDataBase.getInstance(requireContext())
+
+        val retrofit = retrofit2.Retrofit.Builder()
+            .baseUrl("https://wger.de/")
+            .addConverterFactory(retrofit2.converter.gson.GsonConverterFactory.create())
+            .build()
+        val apiService = retrofit.create(com.estudiante.strennus_proyweb.data.APIService::class.java)
+
         val repository = AppRepository(
             db.usuarioDao(),
             db.sesionDao(),
             db.detalleDao(),
-            db.rutinaDao()
+            db.rutinaDao(),
+            apiService
         )
         val factory = AppViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
-        viewModel.cargarSesiones(usuarioId)
     }
 
     private fun setupRecyclerView() {
